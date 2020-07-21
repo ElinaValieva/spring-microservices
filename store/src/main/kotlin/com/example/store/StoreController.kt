@@ -1,11 +1,11 @@
-package com.example.account
+package com.example.store
 
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class AccountController {
+class StoreController {
 
     @GetMapping("/")
-    fun greeting() = "Hello from account"
+    fun greeting() = "Hello from store"
 }
