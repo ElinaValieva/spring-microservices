@@ -5,7 +5,19 @@ eureka:
   instance:
     preferIpAddress: true
 server:
-  port: 0
+  port: 8088
 spring:
+  profiles:
+    active: native
   application:
     name: config
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: file:///C:/Users/Elina/IdeaProjects/spring-microservices/configuration-repo
+  #  cloud:
+#    config:
+#      server:
+#        git:
+#          uri: https://github.com/o7planning/spring-cloud-config-git-repo-example.git
