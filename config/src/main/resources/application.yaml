@@ -8,4 +8,4 @@ server:
   port: 0
 spring:
   application:
-    name: order
+    name: config
