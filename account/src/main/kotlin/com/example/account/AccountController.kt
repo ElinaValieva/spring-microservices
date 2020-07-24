@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/account")
 class AccountController {
 
-    @GetMapping("/")
+    @GetMapping("/greeting")
     fun greeting() = "Hello from account"
 }

@@ -2,10 +2,10 @@ eureka:
   client:
     serviceUrl:
       defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
-  instance:
-    preferIpAddress: true
+zuul:
+  prefix: /api
 server:
-  port: 0
+  port: 8000
 spring:
   application:
     name: gateway
