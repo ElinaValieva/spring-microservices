@@ -1,11 +1,16 @@
 package com.example.order
 
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RestController
+import com.example.order.repository.Order
+import com.example.order.service.OrderService
+import org.springframework.web.bind.annotation.*
 
 @RestController
-class OrderController {
+@RequestMapping("/order")
+class OrderController(private val orderService: OrderService) {
 
-    @GetMapping("/presents")
-    fun presents() = "Hello from order"
+    @PostMapping("/")
+    fun order(@RequestBody order: Order) = orderService.createOrder(order)
+
+    @GetMapping("/{id}")
+    fun getInfo(@PathVariable("id") orderId: String) = orderService.getOrderInfo(orderId)
 }

@@ -8,7 +8,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: *
+        include: "*"
 server:
   port: 8088
 spring:

@@ -15,8 +15,12 @@ spring:
     admin:
       client:
         url: ${ADMIN_URI:http://localhost:8888}
+  data:
+    mongodb:
+      uri: mongodb://127.0.0.1:27017
+      database: order
 management:
   endpoints:
     web:
       exposure:
-        include: *
+        include: "*"
