@@ -27,6 +27,7 @@ dependencies {
     implementation("de.codecentric:spring-boot-admin-starter-client")
     implementation("org.springframework.cloud:spring-cloud-config-client")
     implementation("org.postgresql:postgresql:42.2.10")
+    implementation("org.springframework.kafka:spring-kafka")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }

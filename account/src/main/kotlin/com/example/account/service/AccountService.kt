@@ -3,10 +3,15 @@ package com.example.account.service
 import com.example.account.exception.AccountException
 import com.example.account.repository.Account
 import com.example.account.repository.AccountRepository
+import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Service
 
+
 @Service
-class AccountService(var accountRepository: AccountRepository) {
+class AccountService(
+    private val accountRepository: AccountRepository,
+    private val kafkaTemplate: KafkaTemplate<String, String>
+) {
 
     fun register(account: Account) {
         val foundedUser = accountRepository.findByUsername(account.username)
@@ -15,6 +20,7 @@ class AccountService(var accountRepository: AccountRepository) {
             throw AccountException("User with same username already exist")
 
         accountRepository.save(account)
+        notify(account.username)
     }
 
     fun login(username: String) =
@@ -27,5 +33,9 @@ class AccountService(var accountRepository: AccountRepository) {
         foundedUser.email = account.email
 
         accountRepository.save(foundedUser)
+    }
+
+    fun notify(username: String) {
+        kafkaTemplate.send("register", username)
     }
 }
