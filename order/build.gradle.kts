@@ -24,7 +24,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
-    implementation("org.springframework.data:spring-data-mongodb:1.8.0.RELEASE")
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
     implementation("de.codecentric:spring-boot-admin-starter-client")
     implementation("org.springframework.kafka:spring-kafka")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
