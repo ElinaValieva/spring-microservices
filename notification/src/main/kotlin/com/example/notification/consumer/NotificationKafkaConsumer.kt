@@ -1,4 +1,4 @@
-package com.example.notification.service
+package com.example.notification.consumer
 
 import org.springframework.kafka.annotation.KafkaListener
 
