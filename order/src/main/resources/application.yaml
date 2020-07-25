@@ -11,3 +11,12 @@ server:
 spring:
   application:
     name: order
+  boot:
+    admin:
+      client:
+        url: ${ADMIN_URI:http://localhost:8888}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: *
