@@ -1,0 +1,26 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+  instance:
+    preferIpAddress: true
+    leaseRenewalIntervalInSeconds: 5
+    leaseExpirationDurationInSeconds: 5
+server:
+  port: 0
+spring:
+  application:
+    name: delivery
+  boot:
+    admin:
+      client:
+        url: ${ADMIN_URI:http://localhost:8888}
+  data:
+    mongodb:
+      uri: mongodb://127.0.0.1:27017
+      database: delivery
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
