@@ -2,23 +2,24 @@ package com.example.order.service
 
 import com.example.order.repository.Order
 import com.example.order.repository.OrderRepository
-import com.example.order.repository.Status
-import org.springframework.kafka.core.KafkaTemplate
+import com.example.order.saga.CreateOrderSaga
+import com.example.order.saga.CreateOrderSagaData
+import io.eventuate.tram.sagas.orchestration.SagaInstanceFactory
 import org.springframework.stereotype.Service
-import java.util.*
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class OrderService(
     private var orderRepository: OrderRepository,
-    private val kafkaTemplate: KafkaTemplate<String, String>
+    private val createOrderSaga: CreateOrderSaga,
+    private val sagaInstanceFactory: SagaInstanceFactory
 ) {
 
-    fun createOrder(order: Order): Any {
-        order.track = UUID.randomUUID().toString()
-        kafkaTemplate.send("store", order.product.toString())
-        order.status = Status.Accepted
-        orderRepository.save(order)
-        return order
+    @Transactional
+    fun createOrder(order: Order): Order {
+        val createOrderSagaData = CreateOrderSagaData(order = order)
+        sagaInstanceFactory.create(createOrderSaga, createOrderSagaData)
+        return orderRepository.findById(createOrderSagaData.id).get()
     }
 
     fun getOrderInfo(orderId: String) = orderRepository.findById(orderId)
