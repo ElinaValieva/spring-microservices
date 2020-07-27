@@ -12,6 +12,7 @@ version = "1.0.0"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
+    mavenLocal()
     mavenCentral()
     jcenter()
 }
@@ -30,6 +31,8 @@ dependencies {
     implementation("org.springframework.kafka:spring-kafka")
     implementation("io.eventuate.tram.sagas:eventuate-tram-sagas-orchestration:0.13.0.RELEASE")
     implementation("io.eventuate.tram.sagas:eventuate-tram-sagas-orchestration-simple-dsl:0.13.0.RELEASE")
+    implementation("io.eventuate.tram.sagas:eventuate-tram-sagas-orchestration-simple-dsl:0.13.0.RELEASE")
+    implementation("com.example:cqrs_command:1.0.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }

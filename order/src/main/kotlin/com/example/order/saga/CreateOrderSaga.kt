@@ -1,8 +1,11 @@
 package com.example.order.saga
 
+import com.example.cqrs_command.CreateDeliveryCommand
+import com.example.cqrs_command.DeliveryUnavailable
+import com.example.cqrs_command.ProductReservation
+import com.example.cqrs_command.ReserveStoreProductCommand
 import com.example.order.repository.Order
 import com.example.order.repository.OrderRepository
-import io.eventuate.tram.commands.common.Command
 import io.eventuate.tram.commands.consumer.CommandWithDestination
 import io.eventuate.tram.commands.consumer.CommandWithDestinationBuilder.send
 import io.eventuate.tram.sagas.orchestration.SagaDefinition
@@ -35,12 +38,12 @@ class CreateOrderSaga(private val orderRepository: OrderRepository) : SimpleSaga
     }
 
     private fun reserveProduct(createOrderSagaData: CreateOrderSagaData): CommandWithDestination =
-        send(createOrderSagaData.order.product?.let { ReserveStore(product = it) })
+        send(createOrderSagaData.order.product?.let { ReserveStoreProductCommand(it) })
             .to("store")
             .build()
 
     private fun createDelivery(createOrderSagaData: CreateOrderSagaData): CommandWithDestination =
-        send(createOrderSagaData.order.id?.let { CreateDelivery(order = it) })
+        send(createOrderSagaData.order.id?.let { CreateDeliveryCommand(order = it) })
             .to("delivery")
             .build()
 
@@ -65,16 +68,6 @@ class CreateOrderSaga(private val orderRepository: OrderRepository) : SimpleSaga
         createOrderSagaData.rejectionReason = RejectedReason.DELIVERY_UNAVAILABLE
     }
 }
-
-class DeliveryUnavailable : ReverseOrderResult
-
-class CreateDelivery(order: String) : Command
-
-class ReserveStore(product: String) : Command
-
-class ProductReservation : ReverseOrderResult
-
-interface ReverseOrderResult
 
 class CreateOrderSagaData(
     var order: Order,
