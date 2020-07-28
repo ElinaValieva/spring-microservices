@@ -16,11 +16,11 @@ class OrderService(
 ) {
 
     @Transactional
-    fun createOrder(order: Order): Order {
+    fun createOrder(order: Order): Order? {
         val createOrderSagaData = CreateOrderSagaData(order = order)
         sagaInstanceFactory.create(createOrderSaga, createOrderSagaData)
-        return orderRepository.findById(createOrderSagaData.id).get()
+        return createOrderSagaData.id?.let { orderRepository.findById(it).get() }
     }
 
-    fun getOrderInfo(orderId: String) = orderRepository.findById(orderId)
+    fun getOrderInfo(orderId: Long) = orderRepository.findById(orderId)
 }

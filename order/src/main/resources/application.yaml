@@ -7,7 +7,7 @@ eureka:
     leaseRenewalIntervalInSeconds: 5
     leaseExpirationDurationInSeconds: 5
 server:
-  port: 0
+  port: 8881
 spring:
   application:
     name: order
@@ -16,15 +16,23 @@ spring:
       client:
         url: ${ADMIN_URI:http://localhost:8888}
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5432/eventuate
     username: postgres
     password: pass
     driver-class-name: org.postgresql.Driver
-    jpa:
-      database: postgresql
-      database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+    generate-ddl: true
 management:
   endpoints:
     web:
       exposure:
         include: "*"
+eventuatelocal:
+  kafka:
+    bootstrap:
+      servers: ${KAFKA_URI:http://localhost:9092}
+  zookeeper:
+    connection:
+      string: ${ZOOKEEPER_URI:http://localhost:2181}
