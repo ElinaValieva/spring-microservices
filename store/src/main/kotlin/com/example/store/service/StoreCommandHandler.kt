@@ -11,6 +11,8 @@ import io.eventuate.tram.messaging.common.Message
 import io.eventuate.tram.sagas.participant.SagaCommandDispatcherFactory
 import io.eventuate.tram.sagas.participant.SagaCommandHandlersBuilder
 import io.eventuate.tram.sagas.spring.participant.SagaParticipantConfiguration
+import io.eventuate.tram.spring.consumer.kafka.EventuateTramKafkaMessageConsumerConfiguration
+import io.eventuate.tram.spring.messaging.producer.jdbc.TramMessageProducerJdbcConfiguration
 import io.eventuate.tram.spring.optimisticlocking.OptimisticLockingDecoratorConfiguration
 import org.bouncycastle.util.StoreException
 import org.springframework.context.annotation.Bean
@@ -37,7 +39,12 @@ class StoreCommandHandler(private val storeService: StoreService) {
 
 
 @Configuration
-@Import(SagaParticipantConfiguration::class, OptimisticLockingDecoratorConfiguration::class)
+@Import(
+    SagaParticipantConfiguration::class,
+    OptimisticLockingDecoratorConfiguration::class,
+    EventuateTramKafkaMessageConsumerConfiguration::class,
+    TramMessageProducerJdbcConfiguration::class
+)
 class StoreConfiguration {
 
     @Bean
