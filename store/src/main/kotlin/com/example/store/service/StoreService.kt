@@ -3,9 +3,7 @@ package com.example.store.service
 import com.example.store.exception.StoreException
 import com.example.store.repository.Product
 import com.example.store.repository.StoreRepository
-import org.springframework.stereotype.Service
 
-@Service
 class StoreService(private val storeRepository: StoreRepository) {
 
     fun getPresents(): MutableIterable<Product> = storeRepository.findAll()

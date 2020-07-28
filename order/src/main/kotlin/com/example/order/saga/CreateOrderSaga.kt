@@ -2,6 +2,7 @@ package com.example.order.saga
 
 import com.example.cqrs_command.CreateDeliveryCommand
 import com.example.cqrs_command.DeliveryUnavailable
+import com.example.cqrs_command.ProductReservation
 import com.example.cqrs_command.ReserveStoreProductCommand
 import com.example.order.repository.Order
 import com.example.order.repository.OrderRepository
@@ -26,18 +27,18 @@ class CreateOrderSaga(private val orderRepository: OrderRepository) : SimpleSaga
             .withCompensation(this::reject)
             .step()
             .invokeParticipant(this::reserveProduct)
-            .onReply(ReserveStoreProductCommand::class.java, this::handleProductReservation)
+            .onReply(ProductReservation::class.java, this::handleProductReservation)
             .step()
-//            .invokeParticipant(this::createDelivery)
-//            .onReply(DeliveryUnavailable::class.java, this::handleDeliveryUnavailable)
-//            .step()
+            .invokeParticipant(this::createDelivery)
+            .onReply(DeliveryUnavailable::class.java, this::handleDeliveryUnavailable)
+            .step()
             .invokeLocal(this::approve)
             .build()
 
     private fun create(createOrderSagaData: CreateOrderSagaData) {
         val orderData = createOrderSagaData.order
         val order = orderRepository.save(Order(user = orderData.user, product = orderData.product))
-        createOrderSagaData.id = order.id!!
+        createOrderSagaData.id = order.id
     }
 
     private fun reject(createOrderSagaData: CreateOrderSagaData) {
@@ -51,12 +52,12 @@ class CreateOrderSaga(private val orderRepository: OrderRepository) : SimpleSaga
     private fun reserveProduct(createOrderSagaData: CreateOrderSagaData): CommandWithDestination {
         println("Try to reserve product")
         return send(createOrderSagaData.order.product?.let { ReserveStoreProductCommand(it) })
-            .to("my_store")
+            .to("storeService")
             .build()
     }
 
     private fun createDelivery(createOrderSagaData: CreateOrderSagaData): CommandWithDestination =
-        send(createOrderSagaData.order.id?.let { CreateDeliveryCommand(order = it.toString()) })
+        send(CreateDeliveryCommand(order = createOrderSagaData.order.id.toString()))
             .to("delivery")
             .build()
 
@@ -71,7 +72,7 @@ class CreateOrderSaga(private val orderRepository: OrderRepository) : SimpleSaga
 
     private fun handleProductReservation(
         createOrderSagaData: CreateOrderSagaData,
-        productReservation: ReserveStoreProductCommand
+        productReservation: ProductReservation
     ) {
         println(productReservation)
         createOrderSagaData.rejectionReason = RejectedReason.PRODUCT_ALREADY_RESERVED

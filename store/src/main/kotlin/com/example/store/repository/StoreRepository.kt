@@ -4,7 +4,7 @@ import org.springframework.data.repository.CrudRepository
 import javax.persistence.*
 
 @Entity
-@Table(name = "product")
+@Table(name = "product", schema = "eventuate")
 open class Product(
     @Id @GeneratedValue(strategy = GenerationType.AUTO) open var id: Long? = null,
     open var description: String? = null,
