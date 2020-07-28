@@ -31,7 +31,10 @@ class DeliveryCommandHandler(private val deliveryService: DeliveryService) {
 
     private fun reserve(commandMessage: CommandMessage<CreateDeliveryCommand>): Message? {
         return try {
-            deliveryService.createDelivery(commandMessage.command.order)
+            deliveryService.createDelivery(
+                orderId = commandMessage.command.orderId,
+                city = commandMessage.command.city
+            )
             withSuccess(ProductReserved())
         } catch (e: DeliveryException) {
             withFailure(DeliveryUnavailable())
