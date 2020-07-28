@@ -9,9 +9,7 @@ interface CityDeliveryRepository : MongoRepository<City, String> {
     fun findByArrival(arrival: String): City?
 }
 
-interface DeliveryRepository : MongoRepository<Delivery, String> {
-
-}
+interface DeliveryRepository : MongoRepository<Delivery, String>
 
 @Document(collection = "delivery")
 class Delivery(

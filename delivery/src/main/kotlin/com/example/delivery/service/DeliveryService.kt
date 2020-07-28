@@ -5,6 +5,7 @@ import com.example.delivery.repository.CityDeliveryRepository
 import com.example.delivery.repository.Delivery
 import com.example.delivery.repository.DeliveryRepository
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class DeliveryService(
@@ -16,15 +17,15 @@ class DeliveryService(
 
     fun getDeliveryInfo(id: String) = deliveryRepository.findById(id)
 
-    fun createDelivery(delivery: Delivery): String? {
-        val deliveryCity = delivery.city?.arrival?.let { cityDeliveryRepository.findByArrival(it) }
+    fun createDelivery(city: String) {
+        val deliveryCity = cityDeliveryRepository.findByArrival(city)
             ?: throw DeliveryException("City not supported")
-        return deliveryRepository.save(
+        deliveryRepository.save(
             Delivery(
-                orderTrack = delivery.orderTrack,
+                orderTrack = UUID.randomUUID().toString(),
                 city = deliveryCity,
                 duration = deliveryCity.duration
             )
-        ).id
+        )
     }
 }
