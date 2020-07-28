@@ -10,6 +10,12 @@ import io.eventuate.tram.commands.consumer.CommandWithDestination
 import io.eventuate.tram.commands.consumer.CommandWithDestinationBuilder.send
 import io.eventuate.tram.sagas.orchestration.SagaDefinition
 import io.eventuate.tram.sagas.simpledsl.SimpleSaga
+import io.eventuate.tram.sagas.spring.orchestration.SagaOrchestratorConfiguration
+import io.eventuate.tram.spring.optimisticlocking.OptimisticLockingDecoratorConfiguration
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Import
+
 
 class CreateOrderSaga(private val orderRepository: OrderRepository) : SimpleSaga<CreateOrderSagaData> {
 
@@ -77,4 +83,12 @@ class CreateOrderSagaData(
 
 enum class RejectedReason {
     PRODUCT_ALREADY_RESERVED, DELIVERY_UNAVAILABLE
+}
+
+@Configuration
+@Import(SagaOrchestratorConfiguration::class, OptimisticLockingDecoratorConfiguration::class)
+class SagaConfiguration {
+
+    @Bean
+    fun createOrderSaga(orderRepository: OrderRepository) = CreateOrderSaga(orderRepository)
 }

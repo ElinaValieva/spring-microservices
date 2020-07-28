@@ -1,15 +1,16 @@
 package com.example.order.repository
 
+
 import com.example.order.saga.RejectedReason
-import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.mapping.Document
-import org.springframework.data.mongodb.repository.MongoRepository
+import org.springframework.data.repository.CrudRepository
+import javax.persistence.*
 
-interface OrderRepository : MongoRepository<Order, String>
+interface OrderRepository : CrudRepository<Order, Long>
 
-@Document(collection = "order")
+@Entity
+@Table(name = "order")
 data class Order(
-    @Id var id: String? = null,
+    @Id @GeneratedValue(strategy = GenerationType.AUTO) var id: Long? = null,
     var user: String? = null,
     var product: String? = null,
     var status: Status = Status.Created,
