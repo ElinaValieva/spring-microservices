@@ -17,14 +17,15 @@ class DeliveryService(
 
     fun getDeliveryInfo(id: String) = deliveryRepository.findById(id)
 
-    fun createDelivery(city: String) {
+    fun createDelivery(city: String, orderId: String) {
         val deliveryCity = cityDeliveryRepository.findByArrival(city)
             ?: throw DeliveryException("City not supported")
         deliveryRepository.save(
             Delivery(
-                orderTrack = UUID.randomUUID().toString(),
+                deliveryTrack = UUID.randomUUID().toString(),
                 city = deliveryCity,
-                duration = deliveryCity.duration
+                duration = deliveryCity.duration,
+                orderId = orderId
             )
         )
     }

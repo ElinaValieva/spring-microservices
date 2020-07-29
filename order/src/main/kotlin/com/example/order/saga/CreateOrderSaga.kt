@@ -5,6 +5,7 @@ import com.example.cqrs_command.DeliveryUnavailable
 import com.example.cqrs_command.ProductReservation
 import com.example.cqrs_command.ReserveStoreProductCommand
 import com.example.order.repository.Order
+import com.example.order.repository.OrderDetails
 import com.example.order.repository.OrderRepository
 import io.eventuate.tram.commands.consumer.CommandWithDestination
 import io.eventuate.tram.commands.consumer.CommandWithDestinationBuilder.send
@@ -36,7 +37,7 @@ class CreateOrderSaga(private val orderRepository: OrderRepository) : SimpleSaga
             .build()
 
     private fun create(createOrderSagaData: CreateOrderSagaData) {
-        val orderData = createOrderSagaData.order
+        val orderData = createOrderSagaData.orderDetails
         val order = orderRepository.save(Order(user = orderData.user, product = orderData.product))
         createOrderSagaData.id = order.id
     }
@@ -51,13 +52,18 @@ class CreateOrderSaga(private val orderRepository: OrderRepository) : SimpleSaga
 
     private fun reserveProduct(createOrderSagaData: CreateOrderSagaData): CommandWithDestination {
         println("Try to reserve product")
-        return send(createOrderSagaData.order.product?.let { ReserveStoreProductCommand(it) })
+        return send(createOrderSagaData.orderDetails.product.let { ReserveStoreProductCommand(it) })
             .to("storeService")
             .build()
     }
 
     private fun createDelivery(createOrderSagaData: CreateOrderSagaData): CommandWithDestination =
-        send(CreateDeliveryCommand(order = createOrderSagaData.order.id.toString()))
+        send(
+            CreateDeliveryCommand(
+                orderId = createOrderSagaData.id.toString(),
+                city = createOrderSagaData.orderDetails.city
+            )
+        )
             .to("delivery")
             .build()
 
@@ -88,7 +94,7 @@ class CreateOrderSaga(private val orderRepository: OrderRepository) : SimpleSaga
 }
 
 class CreateOrderSagaData(
-    var order: Order,
+    var orderDetails: OrderDetails,
     var id: Long? = null,
     var rejectionReason: RejectedReason? = null
 )

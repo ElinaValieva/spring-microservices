@@ -1,6 +1,7 @@
 package com.example.order.service
 
 import com.example.order.repository.Order
+import com.example.order.repository.OrderDetails
 import com.example.order.repository.OrderRepository
 import com.example.order.saga.CreateOrderSaga
 import com.example.order.saga.CreateOrderSagaData
@@ -16,8 +17,8 @@ class OrderService(
 ) {
 
     @Transactional
-    fun createOrder(order: Order): Order? {
-        val createOrderSagaData = CreateOrderSagaData(order = order)
+    fun createOrder(order: OrderDetails): Order? {
+        val createOrderSagaData = CreateOrderSagaData(orderDetails = order)
         sagaInstanceFactory.create(createOrderSaga, createOrderSagaData)
         return createOrderSagaData.id?.let { orderRepository.findById(it).get() }
     }

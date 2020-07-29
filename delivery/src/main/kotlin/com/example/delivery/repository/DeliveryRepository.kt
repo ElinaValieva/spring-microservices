@@ -12,15 +12,16 @@ interface CityDeliveryRepository : MongoRepository<City, String> {
 interface DeliveryRepository : MongoRepository<Delivery, String>
 
 @Document(collection = "delivery")
-class Delivery(
+data class Delivery(
     @Id var id: String? = null,
-    var orderTrack: String? = null,
+    var deliveryTrack: String? = null,
     var city: City? = null,
-    var duration: Int
+    var duration: Int,
+    var orderId: String
 )
 
 @Document(collection = "city")
-class City(
+data class City(
     @Id var id: String? = null,
     var destination: String? = null,
     var arrival: String? = null,
