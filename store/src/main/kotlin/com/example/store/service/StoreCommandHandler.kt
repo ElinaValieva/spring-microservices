@@ -3,6 +3,7 @@ package com.example.store.service
 import com.example.cqrs_command.ProductReservation
 import com.example.cqrs_command.ProductReserved
 import com.example.cqrs_command.ReserveStoreProductCommand
+import com.example.store.exception.StoreException
 import com.example.store.repository.StoreRepository
 import io.eventuate.tram.commands.consumer.CommandDispatcher
 import io.eventuate.tram.commands.consumer.CommandHandlerReplyBuilder.withFailure
@@ -16,7 +17,6 @@ import io.eventuate.tram.sagas.spring.participant.SagaParticipantConfiguration
 import io.eventuate.tram.spring.consumer.kafka.EventuateTramKafkaMessageConsumerConfiguration
 import io.eventuate.tram.spring.messaging.producer.jdbc.TramMessageProducerJdbcConfiguration
 import io.eventuate.tram.spring.optimisticlocking.OptimisticLockingDecoratorConfiguration
-import org.bouncycastle.util.StoreException
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
@@ -60,5 +60,5 @@ class StoreConfiguration {
         storeCommandHandler: StoreCommandHandler,
         sagaCommandDispatcherFactory: SagaCommandDispatcherFactory
     ): CommandDispatcher =
-        sagaCommandDispatcherFactory.make("storeCommandDispatcher", storeCommandHandler.commandHandlerDefinitions())
+        sagaCommandDispatcherFactory.make("com.example.order.saga.CreateOrderSaga-consumer", storeCommandHandler.commandHandlerDefinitions())
 }
