@@ -60,5 +60,5 @@ class StoreConfiguration {
         storeCommandHandler: StoreCommandHandler,
         sagaCommandDispatcherFactory: SagaCommandDispatcherFactory
     ): CommandDispatcher =
-        sagaCommandDispatcherFactory.make("storeCommandDispatcher", storeCommandHandler.commandHandlerDefinitions())
+        sagaCommandDispatcherFactory.make("com.example.order.saga.CreateOrderSaga-consumer", storeCommandHandler.commandHandlerDefinitions())
 }

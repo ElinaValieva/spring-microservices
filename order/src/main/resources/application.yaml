@@ -32,7 +32,7 @@ management:
 eventuatelocal:
   kafka:
     bootstrap:
-      servers: ${KAFKA_URI:http://localhost:9092}
+      servers: http://localhost:9092
   zookeeper:
     connection:
-      string: ${ZOOKEEPER_URI:http://localhost:2181}
+      string: http://localhost:2181
