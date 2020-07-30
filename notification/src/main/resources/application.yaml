@@ -15,6 +15,20 @@ spring:
     admin:
       client:
         url: ${ADMIN_URI:http://localhost:8888}
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username:
+    password:
+    properties:
+      mail:
+        smptp:
+          auth: true
+          starttls:
+            enable: true
+kafka:
+  host: localhost
+  port: 9092
 management:
   endpoints:
     web:

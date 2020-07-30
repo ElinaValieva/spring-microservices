@@ -3,6 +3,8 @@ package com.example.notification.consumer
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.kafka.annotation.EnableKafka
@@ -11,15 +13,18 @@ import org.springframework.kafka.config.KafkaListenerContainerFactory
 import org.springframework.kafka.core.ConsumerFactory
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer
+import org.springframework.mail.javamail.JavaMailSender
 
 @EnableKafka
 @Configuration
+@EnableConfigurationProperties
+@ConfigurationProperties
 class KafkaConsumerConfiguration {
 
-    @Value("\${kafka.host:localhost}")
+    @Value("\${kafka.host}")
     private val host: String? = null
 
-    @Value("\${kafka.port:9092}")
+    @Value("\${kafka.port}")
     private val port: Int = 0
 
     @Bean
@@ -47,7 +52,7 @@ class KafkaConsumerConfiguration {
     }
 
     @Bean
-    fun kafkaConsumer(): NotificationKafkaConsumer {
-        return NotificationKafkaConsumer()
+    fun kafkaConsumer(javaMailSender: JavaMailSender): NotificationKafkaConsumer {
+        return NotificationKafkaConsumer(javaMailSender)
     }
 }

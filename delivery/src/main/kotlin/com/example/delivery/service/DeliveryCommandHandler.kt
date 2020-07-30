@@ -50,7 +50,7 @@ class DeliveryCommandHandler(private val deliveryService: DeliveryService) {
     EventuateTramKafkaMessageConsumerConfiguration::class,
     TramMessageProducerJdbcConfiguration::class
 )
-class StoreConfiguration {
+class DeliveryConfiguration {
 
     @Bean
     fun deliveryService(deliveryRepository: DeliveryRepository, cityDeliveryRepository: CityDeliveryRepository) =
