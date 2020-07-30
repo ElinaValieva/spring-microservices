@@ -20,6 +20,7 @@ spring:
     username: postgres
     password: pass
     driver-class-name: org.postgresql.Driver
+    initialization-mode: always
   jpa:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQL10Dialect
