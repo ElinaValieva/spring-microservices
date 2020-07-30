@@ -8,4 +8,7 @@ data class ReserveStoreProductCommand @JsonCreator constructor(
     @JsonValue var productId: String
 ) : Command
 
-data class CreateDeliveryCommand(var orderId: String, var city: String) : Command
+data class CreateDeliveryCommand @JsonCreator constructor(
+    @JsonValue var orderId: String,
+    @JsonValue var city: String
+) : Command

@@ -1,28 +1,30 @@
 package com.example.delivery.repository
 
 import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.mapping.Document
-import org.springframework.data.mongodb.repository.MongoRepository
+import org.springframework.data.repository.CrudRepository
+import javax.persistence.*
 
-interface CityDeliveryRepository : MongoRepository<City, String> {
+interface CityDeliveryRepository : CrudRepository<City, String> {
 
     fun findByArrival(arrival: String): City?
 }
 
-interface DeliveryRepository : MongoRepository<Delivery, String>
+interface DeliveryRepository : CrudRepository<Delivery, String>
 
-@Document(collection = "delivery")
+@Entity
+@Table(name = "delivery", schema = "eventuate")
 data class Delivery(
-    @Id var id: String? = null,
-    var deliveryTrack: String? = null,
-    var city: City? = null,
+    @Id @GeneratedValue(strategy = GenerationType.AUTO) var id: String? = null,
+    @Column(name = "delivery_track") var deliveryTrack: String? = null,
+    @OneToOne var city: City? = null,
     var duration: Int,
-    var orderId: String
+    @Column(name = "order_id") var orderId: String
 )
 
-@Document(collection = "city")
+@Entity
+@Table(name = "city", schema = "eventuate")
 data class City(
-    @Id var id: String? = null,
+    @Id @GeneratedValue(strategy = GenerationType.AUTO) var id: String? = null,
     var destination: String? = null,
     var arrival: String? = null,
     var duration: Int
