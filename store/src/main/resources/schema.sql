@@ -1,3 +1,17 @@
+create table product
+(
+    id          bigint  not null
+        constraint product_pkey
+            primary key,
+    count       integer not null,
+    description varchar(255),
+    image       varchar(255),
+    name        varchar(255)
+);
+
+alter table product
+    owner to eventuate;
+
 insert into eventuate.product (id, count, description, image, name) values (1, 8, 'Description for programming languages ​​set Sticker', 'https://ih1.redbubble.net/image.349529895.7905/st,small,507x507-pad,600x600,f8f8f8.u2.jpg', 'programming languages ​​set Sticker');
 insert into eventuate.product (id, count, description, image, name) values (2, 23, 'Description for Java Duke Saying Hi Sticker', 'https://ih1.redbubble.net/image.729269070.2329/st,small,507x507-pad,600x600,f8f8f8.jpg', 'Java Duke Saying Hi Sticker');
 insert into eventuate.product (id, count, description, image, name) values (3, 9, 'Description for Java Logo Sticker', 'https://ih1.redbubble.net/image.512899465.7212/st,small,507x507-pad,600x600,f8f8f8.u5.jpg', 'Java Logo Sticker');

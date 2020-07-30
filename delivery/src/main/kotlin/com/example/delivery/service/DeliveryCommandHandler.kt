@@ -30,6 +30,7 @@ class DeliveryCommandHandler(private val deliveryService: DeliveryService) {
         .build()
 
     private fun reserve(commandMessage: CommandMessage<CreateDeliveryCommand>): Message? {
+        println("Hello from delivery")
         return try {
             deliveryService.createDelivery(
                 orderId = commandMessage.command.orderId,

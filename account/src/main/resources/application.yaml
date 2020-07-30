@@ -4,7 +4,7 @@ spring:
   boot:
     admin:
       client:
-        url: ${ADMIN_URI:http://localhost:8888}
+        url: http://localhost:8888
   application:
     name: account
   datasource:
@@ -23,7 +23,7 @@ management:
 eureka:
   client:
     serviceUrl:
-      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+      defaultZone: http://localhost:8761/eureka
     healthcheck:
       enabled: true
   instance:

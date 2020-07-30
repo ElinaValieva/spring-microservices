@@ -1,7 +1,7 @@
 eureka:
   client:
     serviceUrl:
-      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+      defaultZone: http://localhost:8761/eureka
   instance:
     preferIpAddress: true
     leaseRenewalIntervalInSeconds: 5
@@ -14,7 +14,7 @@ spring:
   boot:
     admin:
       client:
-        url: ${ADMIN_URI:http://localhost:8888}
+        url: http://localhost:8888
   mail:
     host: smtp.gmail.com
     port: 587

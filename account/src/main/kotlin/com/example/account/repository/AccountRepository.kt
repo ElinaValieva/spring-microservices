@@ -5,7 +5,7 @@ import javax.persistence.*
 import javax.validation.constraints.NotBlank
 
 @Entity
-@Table(name = "account")
+@Table(name = "account", schema = "eventuate")
 open class Account(
     @Id @GeneratedValue(strategy = GenerationType.AUTO) @Column(name = "id") open var id: Long? = null,
     @NotBlank(message = "Username may not be blank") @Column(name = "username") open var username: String = "",

@@ -70,7 +70,7 @@ class CreateOrderSaga(private val orderRepository: OrderRepository) : SimpleSaga
                 city = createOrderSagaData.city
             )
         )
-            .to("delivery")
+            .to("deliveryService")
             .build()
 
     private fun approve(createOrderSagaData: CreateOrderSagaData) {

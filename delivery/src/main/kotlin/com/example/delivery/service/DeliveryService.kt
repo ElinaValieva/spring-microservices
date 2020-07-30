@@ -20,6 +20,7 @@ class DeliveryService(
         deliveryRepository.findByOrderId(id) ?: throw DeliveryException("Delivery not found")
 
     fun createDelivery(city: String, orderId: String) {
+        println("Create delivery: $orderId to $city")
         val deliveryCity = checkDelivery(city)
         deliveryRepository.save(
             Delivery(
