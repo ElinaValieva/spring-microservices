@@ -20,6 +20,8 @@ spring:
     username: postgres
     password: pass
     driver-class-name: org.postgresql.Driver
+    initialization-mode: always
+    continue-on-error: true
   jpa:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQL10Dialect
@@ -29,3 +31,10 @@ management:
     web:
       exposure:
         include: "*"
+eventuatelocal:
+  kafka:
+    bootstrap:
+      servers: http://localhost:9092
+  zookeeper:
+    connection:
+      string: http://localhost:2181

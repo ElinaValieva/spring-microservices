@@ -27,6 +27,7 @@ extra["springCloudVersion"] = "Hoxton.SR6"
 extra["springBootAdminVersion"] = "2.2.4"
 
 dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -35,14 +36,13 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     implementation("de.codecentric:spring-boot-admin-starter-client")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("com.example:cqrs_command:1.0.0")
     implementation("org.postgresql:postgresql:42.2.10")
     implementation("io.eventuate.tram.sagas:eventuate-tram-sagas-spring-participant:0.13.0.RELEASE")
     implementation("io.eventuate.tram.core:eventuate-tram-spring-optimistic-locking:0.24.0.RELEASE")
     implementation("io.eventuate.tram.core:eventuate-tram-spring-consumer-kafka:0.24.0.RELEASE")
     implementation("io.eventuate.tram.core:eventuate-tram-spring-consumer-jdbc:0.24.0.RELEASE")
     implementation("io.eventuate.tram.core:eventuate-tram-spring-producer-jdbc:0.24.0.RELEASE")
-    implementation("com.example:cqrs_command:1.0.2")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }

@@ -7,7 +7,7 @@ eureka:
     leaseRenewalIntervalInSeconds: 5
     leaseExpirationDurationInSeconds: 5
 server:
-  port: 8882
+  port: 0
 spring:
   application:
     name: store
@@ -21,6 +21,7 @@ spring:
     password: pass
     driver-class-name: org.postgresql.Driver
     initialization-mode: always
+    continue-on-error: true
   jpa:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQL10Dialect

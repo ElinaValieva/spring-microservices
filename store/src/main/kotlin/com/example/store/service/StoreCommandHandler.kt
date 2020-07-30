@@ -55,7 +55,7 @@ class StoreConfiguration {
     @Bean
     fun storeCommandHandler(storeService: StoreService): StoreCommandHandler = StoreCommandHandler(storeService)
 
-//    @Bean
+    @Bean
     fun consumerCommandDispatcher(
         storeCommandHandler: StoreCommandHandler,
         sagaCommandDispatcherFactory: SagaCommandDispatcherFactory
