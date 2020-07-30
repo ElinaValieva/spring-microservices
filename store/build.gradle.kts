@@ -43,7 +43,7 @@ dependencies {
     implementation("io.eventuate.tram.core:eventuate-tram-spring-consumer-kafka:0.24.0.RELEASE")
     implementation("io.eventuate.tram.core:eventuate-tram-spring-consumer-jdbc:0.24.0.RELEASE")
     implementation("io.eventuate.tram.core:eventuate-tram-spring-producer-jdbc:0.24.0.RELEASE")
-    implementation("com.example:cqrs_command:1.0.1")
+    implementation("com.example:cqrs_command:1.0.2")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }

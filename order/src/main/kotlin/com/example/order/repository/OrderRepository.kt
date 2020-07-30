@@ -7,7 +7,11 @@ import javax.persistence.*
 
 interface OrderRepository : CrudRepository<Order, Long>
 
-data class OrderDetails(var user: String, var city: String, var product: String)
+data class OrderDetails(
+    var user: String,
+    var city: String,
+    var product: String
+)
 
 @Entity
 @Table(schema = "eventuate", name = "order")

@@ -5,8 +5,10 @@ import com.example.cqrs_command.DeliveryUnavailable
 import com.example.cqrs_command.ProductReservation
 import com.example.cqrs_command.ReserveStoreProductCommand
 import com.example.order.repository.Order
-import com.example.order.repository.OrderDetails
 import com.example.order.repository.OrderRepository
+import com.fasterxml.jackson.annotation.JsonAutoDetect
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
 import io.eventuate.tram.commands.consumer.CommandWithDestination
 import io.eventuate.tram.commands.consumer.CommandWithDestinationBuilder.send
 import io.eventuate.tram.sagas.orchestration.SagaDefinition
@@ -37,8 +39,12 @@ class CreateOrderSaga(private val orderRepository: OrderRepository) : SimpleSaga
             .build()
 
     private fun create(createOrderSagaData: CreateOrderSagaData) {
-        val orderData = createOrderSagaData.orderDetails
-        val order = orderRepository.save(Order(user = orderData.user, product = orderData.product))
+        val order = orderRepository.save(
+            Order(
+                user = createOrderSagaData.user,
+                product = createOrderSagaData.product
+            )
+        )
         createOrderSagaData.id = order.id
     }
 
@@ -52,7 +58,7 @@ class CreateOrderSaga(private val orderRepository: OrderRepository) : SimpleSaga
 
     private fun reserveProduct(createOrderSagaData: CreateOrderSagaData): CommandWithDestination {
         println("Try to reserve product")
-        return send(createOrderSagaData.orderDetails.product.let { ReserveStoreProductCommand(it) })
+        return send(createOrderSagaData.product.let { ReserveStoreProductCommand(it) })
             .to("storeService")
             .build()
     }
@@ -61,7 +67,7 @@ class CreateOrderSaga(private val orderRepository: OrderRepository) : SimpleSaga
         send(
             CreateDeliveryCommand(
                 orderId = createOrderSagaData.id.toString(),
-                city = createOrderSagaData.orderDetails.city
+                city = createOrderSagaData.city
             )
         )
             .to("delivery")
@@ -93,10 +99,13 @@ class CreateOrderSaga(private val orderRepository: OrderRepository) : SimpleSaga
     }
 }
 
-class CreateOrderSagaData(
-    var orderDetails: OrderDetails,
-    var id: Long? = null,
-    var rejectionReason: RejectedReason? = null
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+data class CreateOrderSagaData @JsonCreator constructor(
+    @param:JsonProperty("city") @get:JsonProperty("city") var city: String,
+    @param:JsonProperty("user") @get:JsonProperty("user") var user: String,
+    @param:JsonProperty("product") @get:JsonProperty("product") var product: String,
+    @param:JsonProperty("id") @get:JsonProperty("id") var id: Long? = null,
+    @param:JsonProperty("rejectionReason") @get:JsonProperty("rejectionReason") var rejectionReason: RejectedReason? = null
 )
 
 enum class RejectedReason {
