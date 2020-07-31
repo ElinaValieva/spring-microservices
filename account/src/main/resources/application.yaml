@@ -1,5 +1,5 @@
 server:
-  port: 8885
+  port: 0
 spring:
   boot:
     admin:

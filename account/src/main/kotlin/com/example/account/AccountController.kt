@@ -1,15 +1,11 @@
 package com.example.account
 
 import com.example.account.repository.Account
-import com.example.account.repository.Status
 import com.example.account.service.AccountService
 import org.springframework.cloud.context.config.annotation.RefreshScope
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RefreshScope
@@ -30,15 +26,6 @@ class AccountController(var accountService: AccountService) {
         return ResponseEntity.ok(HttpStatus.OK)
     }
 
-    @GetMapping("/hello")
-    fun hello() = ResponseEntity.ok(
-        Account(
-            id = 1,
-            firstName = "Elina",
-            lastName = "Valieva",
-            email = "email",
-            username = "elvaliev",
-            confirmedStatus = Status.EmailConfirmed
-        )
-    )
+    @GetMapping("/user/{id}")
+    fun getUserInfo(@PathVariable("id") id: Long) = accountService.getUserInfo(id)
 }

@@ -3,6 +3,7 @@ package com.example.store.service
 import com.example.store.exception.StoreException
 import com.example.store.repository.Product
 import com.example.store.repository.StoreRepository
+import java.util.*
 
 class StoreService(private val storeRepository: StoreRepository) {
 
@@ -25,4 +26,6 @@ class StoreService(private val storeRepository: StoreRepository) {
             storeRepository.save(product)
         }
     }
+
+    fun getById(id: Long): Optional<Product> = storeRepository.findById(id)
 }

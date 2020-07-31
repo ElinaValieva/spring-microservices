@@ -3,11 +3,9 @@ package com.example.delivery
 import com.example.delivery.service.DeliveryService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/delivery")
 class DeliveryController(private val deliveryService: DeliveryService) {
 
     @GetMapping("/{city}")
