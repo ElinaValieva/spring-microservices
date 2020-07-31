@@ -32,8 +32,12 @@ data class Order(
     fun approve() {
         status = Status.Approved
     }
+
+    fun reserved() {
+        status = Status.Reserved
+    }
 }
 
 enum class Status {
-    Created, Approved, Rejected
+    Created, Reserved, Approved, Rejected
 }

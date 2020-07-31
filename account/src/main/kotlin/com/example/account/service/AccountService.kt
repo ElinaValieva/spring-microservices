@@ -3,24 +3,28 @@ package com.example.account.service
 import com.example.account.exception.AccountException
 import com.example.account.repository.Account
 import com.example.account.repository.AccountRepository
-import org.springframework.kafka.core.KafkaTemplate
+import io.eventuate.tram.sagas.orchestration.SagaInstanceFactory
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 
 @Service
 class AccountService(
     private val accountRepository: AccountRepository,
-    private val kafkaTemplate: KafkaTemplate<String, String>
+    private val accountSaga: AccountSaga,
+    private val sagaInstanceFactory: SagaInstanceFactory
 ) {
 
-    fun register(account: Account) {
+    @Transactional
+    fun register(account: Account): Account? {
         val foundedUser = accountRepository.findByUsername(account.username)
 
         if (foundedUser != null)
             throw AccountException("User with same username already exist")
 
-        accountRepository.save(account)
-        notify(account.username)
+        val sagaData = AccountSagaData(account = account)
+        sagaInstanceFactory.create(accountSaga, sagaData)
+        return sagaData.id?.let { accountRepository.findById(it).get() }
     }
 
     fun login(username: String) =
@@ -33,9 +37,5 @@ class AccountService(
         foundedUser.email = account.email
 
         accountRepository.save(foundedUser)
-    }
-
-    fun notify(username: String) {
-        kafkaTemplate.send("register", username)
     }
 }

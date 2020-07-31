@@ -1,6 +1,7 @@
 package com.example.delivery.service
 
 import com.example.cqrs_command.CreateDeliveryCommand
+import com.example.cqrs_command.DeliveryCreated
 import com.example.cqrs_command.DeliveryUnavailable
 import com.example.cqrs_command.ProductReserved
 import com.example.delivery.exception.DeliveryException
@@ -36,7 +37,7 @@ class DeliveryCommandHandler(private val deliveryService: DeliveryService) {
                 orderId = commandMessage.command.orderId,
                 city = commandMessage.command.city
             )
-            withSuccess(ProductReserved())
+            withSuccess(DeliveryCreated())
         } catch (e: DeliveryException) {
             withFailure(DeliveryUnavailable())
         }

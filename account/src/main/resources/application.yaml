@@ -8,7 +8,7 @@ spring:
   application:
     name: account
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5432/eventuate
     username: postgres
     password: pass
     driver-class-name: org.postgresql.Driver
@@ -30,3 +30,10 @@ eureka:
     preferIpAddress: true
     leaseRenewalIntervalInSeconds: 5
     leaseExpirationDurationInSeconds: 5
+eventuatelocal:
+  kafka:
+    bootstrap:
+      servers: http://localhost:9092
+  zookeeper:
+    connection:
+      string: http://localhost:2181

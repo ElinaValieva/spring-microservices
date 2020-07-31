@@ -1,6 +1,6 @@
 package com.example.store.service
 
-import com.example.cqrs_command.ProductReservation
+import com.example.cqrs_command.FailedToReserveProduct
 import com.example.cqrs_command.ProductReserved
 import com.example.cqrs_command.ReserveStoreProductCommand
 import com.example.store.exception.StoreException
@@ -34,7 +34,7 @@ class StoreCommandHandler(private val storeService: StoreService) {
             storeService.receive(commandMessage.command.productId)
             withSuccess(ProductReserved())
         } catch (e: StoreException) {
-            withFailure(ProductReservation())
+            withFailure(FailedToReserveProduct())
         }
     }
 }

@@ -15,3 +15,8 @@ data class CreateDeliveryCommand @JsonCreator constructor(
     @param:JsonProperty("orderId") @get:JsonProperty("orderId") var orderId: String,
     @param:JsonProperty("city") @get:JsonProperty("city") var city: String
 ) : Command
+
+
+data class NotifyUserCommand @JsonCreator constructor(
+    @JsonValue var username: String
+) : Command

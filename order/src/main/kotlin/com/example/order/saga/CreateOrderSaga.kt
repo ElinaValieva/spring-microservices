@@ -1,9 +1,6 @@
 package com.example.order.saga
 
-import com.example.cqrs_command.CreateDeliveryCommand
-import com.example.cqrs_command.DeliveryUnavailable
-import com.example.cqrs_command.ProductReservation
-import com.example.cqrs_command.ReserveStoreProductCommand
+import com.example.cqrs_command.*
 import com.example.order.repository.Order
 import com.example.order.repository.OrderRepository
 import com.fasterxml.jackson.annotation.JsonAutoDetect
@@ -30,12 +27,12 @@ class CreateOrderSaga(private val orderRepository: OrderRepository) : SimpleSaga
             .withCompensation(this::reject)
             .step()
             .invokeParticipant(this::reserveProduct)
-            .onReply(ProductReservation::class.java, this::handleProductReservation)
+            .onReply(FailedToReserveProduct::class.java, this::handleProductReservation)
+            .onReply(ProductReserved::class.java, this::reserved)
             .step()
             .invokeParticipant(this::createDelivery)
             .onReply(DeliveryUnavailable::class.java, this::handleDeliveryUnavailable)
-            .step()
-            .invokeLocal(this::approve)
+            .onReply(DeliveryCreated::class.java, this::approve)
             .build()
 
     private fun create(createOrderSagaData: CreateOrderSagaData) {
@@ -73,7 +70,10 @@ class CreateOrderSaga(private val orderRepository: OrderRepository) : SimpleSaga
             .to("deliveryService")
             .build()
 
-    private fun approve(createOrderSagaData: CreateOrderSagaData) {
+    private fun approve(
+        createOrderSagaData: CreateOrderSagaData,
+        deliveryCreated: DeliveryCreated
+    ) {
         createOrderSagaData.rejectionReason?.let {
             createOrderSagaData.id?.let { it1 ->
                 orderRepository.findById(it1).get().approve()
@@ -81,13 +81,24 @@ class CreateOrderSaga(private val orderRepository: OrderRepository) : SimpleSaga
         }
     }
 
+    private fun reserved(
+        createOrderSagaData: CreateOrderSagaData,
+        productReserved: ProductReserved
+    ) {
+        createOrderSagaData.rejectionReason?.let {
+            createOrderSagaData.id?.let { it1 ->
+                orderRepository.findById(it1).get().reserved()
+            }
+        }
+    }
+
 
     private fun handleProductReservation(
         createOrderSagaData: CreateOrderSagaData,
-        productReservation: ProductReservation
+        productReservation: FailedToReserveProduct
     ) {
         println(productReservation)
-        createOrderSagaData.rejectionReason = RejectedReason.PRODUCT_ALREADY_RESERVED
+        createOrderSagaData.rejectionReason = RejectedReason.PRODUCT_WAS_NOT_RESERVED
     }
 
     private fun handleDeliveryUnavailable(
@@ -109,7 +120,7 @@ data class CreateOrderSagaData @JsonCreator constructor(
 )
 
 enum class RejectedReason {
-    PRODUCT_ALREADY_RESERVED, DELIVERY_UNAVAILABLE
+    PRODUCT_WAS_NOT_RESERVED, DELIVERY_UNAVAILABLE
 }
 
 @Configuration
