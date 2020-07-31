@@ -5,9 +5,7 @@ import com.example.account.service.AccountService
 import org.springframework.cloud.context.config.annotation.RefreshScope
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RefreshScope
@@ -27,4 +25,7 @@ class AccountController(var accountService: AccountService) {
         accountService.edit(account)
         return ResponseEntity.ok(HttpStatus.OK)
     }
+
+    @GetMapping("/user/{id}")
+    fun getUserInfo(@PathVariable("id") id: Long) = accountService.getUserInfo(id)
 }

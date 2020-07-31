@@ -6,6 +6,7 @@ import com.example.account.repository.AccountRepository
 import io.eventuate.tram.sagas.orchestration.SagaInstanceFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
 
 
 @Service
@@ -38,4 +39,6 @@ class AccountService(
 
         accountRepository.save(foundedUser)
     }
+
+    fun getUserInfo(id: Long): Optional<Account> = accountRepository.findById(id)
 }

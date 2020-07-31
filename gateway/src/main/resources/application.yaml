@@ -5,7 +5,7 @@ eureka:
 zuul:
   prefix: /api
 server:
-  port: 8000
+  port: 8008
 spring:
   application:
     name: gateway
