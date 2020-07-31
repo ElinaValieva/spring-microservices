@@ -5,12 +5,12 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "product", schema = "eventuate")
-open class Product(
-    @Id @GeneratedValue(strategy = GenerationType.AUTO) open var id: Long? = null,
-    open var description: String? = null,
-    open var name: String = "",
-    open var image: String? = null,
-    open var count: Int = 0
+data class Product(
+    @Id @GeneratedValue(strategy = GenerationType.AUTO) var id: Long? = null,
+    var description: String? = null,
+    var name: String = "",
+    var image: String? = null,
+    var count: Int = 0
 )
 
 interface StoreRepository : CrudRepository<Product, Long>

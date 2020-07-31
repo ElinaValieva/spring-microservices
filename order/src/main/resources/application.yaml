@@ -7,7 +7,7 @@ eureka:
     leaseRenewalIntervalInSeconds: 5
     leaseExpirationDurationInSeconds: 5
 server:
-  port: 0
+  port: 8886
 spring:
   application:
     name: order
