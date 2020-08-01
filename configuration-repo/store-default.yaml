@@ -1,0 +1,50 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    preferIpAddress: true
+    leaseRenewalIntervalInSeconds: 5
+    leaseExpirationDurationInSeconds: 5
+server:
+  port: 0
+spring:
+  application:
+    name: store
+  boot:
+    admin:
+      client:
+        url: http://localhost:8888
+  datasource:
+    url: jdbc:postgresql://localhost:5432/eventuate
+    username: postgres
+    password: pass
+    driver-class-name: org.postgresql.Driver
+    initialization-mode: always
+    continue-on-error: true
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+    generate-ddl: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+eventuatelocal:
+  kafka:
+    bootstrap:
+      servers: http://localhost:9092
+  zookeeper:
+    connection:
+      string: http://localhost:2181
+logging:
+  level:
+    org:
+      springframework:
+        orm:
+          jpa: INFO
+      hibernate:
+        SQL: DEBUG
+    io:
+      eventuate: DEBUG

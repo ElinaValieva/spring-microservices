@@ -1,0 +1,18 @@
+server:
+  port: 8888
+spring:
+  boot:
+    admin:
+      probed-endpoints: env, metrics, trace, jolokia, info, configprops
+  application:
+    name: admin
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+    healthcheck:
+      enabled: true
+  instance:
+    preferIpAddress: true
+    leaseRenewalIntervalInSeconds: 5
+    leaseExpirationDurationInSeconds: 5
