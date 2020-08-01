@@ -7,7 +7,7 @@
 
 ### Technologies 🚩
 - Spring Boot, Spring Admin
-- Spring Cloud Discovery, Spring Cloud Eureka
+- Spring Cloud Discovery, Spring Cloud Config
 - Eventuate Tram - [CQRS, Sagas](https://eventuate.io/abouteventuatetram.html) with Kafka, Postgres
 
 &nbsp;
