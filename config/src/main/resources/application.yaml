@@ -16,17 +16,11 @@ spring:
     admin:
       client:
         url: ${ADMIN_URI:http://localhost:8888}
-  profiles:
-    active: native
   application:
     name: config
   cloud:
     config:
       server:
-        native:
-          search-locations: file:///C:/Users/Elina/IdeaProjects/spring-microservices/configuration-repo
-  #  cloud:
-#    config:
-#      server:
-#        git:
-#          uri: https://github.com/o7planning/spring-cloud-config-git-repo-example.git
+        git:
+          uri: https://github.com/ElinaValieva/spring-microservices.git
+          search-paths: configuration-repo

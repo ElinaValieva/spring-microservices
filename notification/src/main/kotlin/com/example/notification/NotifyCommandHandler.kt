@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
+import org.springframework.mail.javamail.JavaMailSenderImpl
 
 
 class NotifyCommandHandler(private val javaMailSender: JavaMailSender) {
@@ -53,6 +54,9 @@ class NotifyCommandHandler(private val javaMailSender: JavaMailSender) {
     TramMessageProducerJdbcConfiguration::class
 )
 class NotificationConfiguration {
+
+    @Bean
+    fun javaMailSender() = JavaMailSenderImpl()
 
     @Bean
     fun notifyCommandHandler(javaMailSender: JavaMailSender): NotifyCommandHandler =
