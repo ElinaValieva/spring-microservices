@@ -10,16 +10,13 @@ import io.eventuate.tram.commands.consumer.CommandWithDestination
 import io.eventuate.tram.commands.consumer.CommandWithDestinationBuilder.send
 import io.eventuate.tram.sagas.orchestration.SagaDefinition
 import io.eventuate.tram.sagas.simpledsl.SimpleSaga
-import io.eventuate.tram.sagas.spring.orchestration.SagaOrchestratorConfiguration
-import io.eventuate.tram.spring.consumer.kafka.EventuateTramKafkaMessageConsumerConfiguration
-import io.eventuate.tram.spring.messaging.producer.jdbc.TramMessageProducerJdbcConfiguration
-import io.eventuate.tram.spring.optimisticlocking.OptimisticLockingDecoratorConfiguration
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Import
+import org.apache.juli.logging.LogFactory
+import org.springframework.stereotype.Component
 
-
+@Component
 class CreateOrderSaga(private val orderRepository: OrderRepository) : SimpleSaga<CreateOrderSagaData> {
+
+    private val logger = LogFactory.getLog(CreateOrderSaga::class.java)
 
     override fun getSagaDefinition(): SagaDefinition<CreateOrderSagaData> =
         step()
@@ -54,7 +51,8 @@ class CreateOrderSaga(private val orderRepository: OrderRepository) : SimpleSaga
     }
 
     private fun reserveProduct(createOrderSagaData: CreateOrderSagaData): CommandWithDestination {
-        println("Try to reserve product")
+        logger.debug("Try to reserve product: $createOrderSagaData")
+
         return send(createOrderSagaData.product.let { ReserveStoreProductCommand(it) })
             .to("storeService")
             .build()
@@ -74,6 +72,7 @@ class CreateOrderSaga(private val orderRepository: OrderRepository) : SimpleSaga
         createOrderSagaData: CreateOrderSagaData,
         deliveryCreated: DeliveryCreated
     ) {
+        logger.debug("Approved: $deliveryCreated")
         createOrderSagaData.rejectionReason?.let {
             createOrderSagaData.id?.let { it1 ->
                 orderRepository.findById(it1).get().approve()
@@ -85,6 +84,7 @@ class CreateOrderSaga(private val orderRepository: OrderRepository) : SimpleSaga
         createOrderSagaData: CreateOrderSagaData,
         productReserved: ProductReserved
     ) {
+        logger.debug("Rejected: $productReserved")
         createOrderSagaData.rejectionReason?.let {
             createOrderSagaData.id?.let { it1 ->
                 orderRepository.findById(it1).get().reserved()
@@ -97,7 +97,7 @@ class CreateOrderSaga(private val orderRepository: OrderRepository) : SimpleSaga
         createOrderSagaData: CreateOrderSagaData,
         productReservation: FailedToReserveProduct
     ) {
-        println(productReservation)
+        logger.debug("Handle: $productReservation")
         createOrderSagaData.rejectionReason = RejectedReason.PRODUCT_WAS_NOT_RESERVED
     }
 
@@ -105,7 +105,7 @@ class CreateOrderSaga(private val orderRepository: OrderRepository) : SimpleSaga
         createOrderSagaData: CreateOrderSagaData,
         deliveryUnavailable: DeliveryUnavailable
     ) {
-        println(deliveryUnavailable)
+        logger.debug("Handle: $deliveryUnavailable")
         createOrderSagaData.rejectionReason = RejectedReason.DELIVERY_UNAVAILABLE
     }
 }
@@ -121,17 +121,4 @@ data class CreateOrderSagaData @JsonCreator constructor(
 
 enum class RejectedReason {
     PRODUCT_WAS_NOT_RESERVED, DELIVERY_UNAVAILABLE
-}
-
-@Configuration
-@Import(
-    SagaOrchestratorConfiguration::class,
-    OptimisticLockingDecoratorConfiguration::class,
-    EventuateTramKafkaMessageConsumerConfiguration::class,
-    TramMessageProducerJdbcConfiguration::class
-)
-class SagaConfiguration {
-
-    @Bean
-    fun createOrderSaga(orderRepository: OrderRepository) = CreateOrderSaga(orderRepository)
 }

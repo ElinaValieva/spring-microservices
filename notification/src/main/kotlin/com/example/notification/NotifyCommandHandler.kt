@@ -14,6 +14,7 @@ import io.eventuate.tram.sagas.spring.participant.SagaParticipantConfiguration
 import io.eventuate.tram.spring.consumer.kafka.EventuateTramKafkaMessageConsumerConfiguration
 import io.eventuate.tram.spring.messaging.producer.jdbc.TramMessageProducerJdbcConfiguration
 import io.eventuate.tram.spring.optimisticlocking.OptimisticLockingDecoratorConfiguration
+import org.apache.juli.logging.LogFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
@@ -24,13 +25,15 @@ import org.springframework.mail.javamail.JavaMailSenderImpl
 
 class NotifyCommandHandler(private val javaMailSender: JavaMailSender) {
 
+    private val logger = LogFactory.getLog(NotifyCommandHandler::class.java)
+
     fun commandHandlerDefinitions(): CommandHandlers = SagaCommandHandlersBuilder
         .fromChannel("notificationService")
         .onMessage(NotifyUserCommand::class.java, this::notify)
         .build()
 
     private fun notify(commandMessage: CommandMessage<NotifyUserCommand>): Message? {
-        println("Hello from notify")
+        logger.info("Try to notify user: ${commandMessage.command.username}")
         return try {
             val message = SimpleMailMessage()
             message.setFrom("noreply@baeldung.com")
@@ -38,8 +41,10 @@ class NotifyCommandHandler(private val javaMailSender: JavaMailSender) {
             message.setSubject("Welcome")
             message.setText("Hello from Spring microservice")
             javaMailSender.send(message)
+            logger.info("Successfully notified")
             CommandHandlerReplyBuilder.withSuccess(UserNotified())
         } catch (e: Exception) {
+            logger.warn("Failed to notify $e")
             CommandHandlerReplyBuilder.withFailure(FailedToNotify())
         }
     }

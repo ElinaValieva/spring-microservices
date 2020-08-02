@@ -1,13 +1,11 @@
 package com.example.gateway
 
-import org.springframework.cloud.context.config.annotation.RefreshScope
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Mono
 import java.util.*
 
-@RefreshScope
 @RestController
 class GatewayController(private val client: Client) {
 

@@ -17,11 +17,14 @@ import io.eventuate.tram.sagas.spring.participant.SagaParticipantConfiguration
 import io.eventuate.tram.spring.consumer.kafka.EventuateTramKafkaMessageConsumerConfiguration
 import io.eventuate.tram.spring.messaging.producer.jdbc.TramMessageProducerJdbcConfiguration
 import io.eventuate.tram.spring.optimisticlocking.OptimisticLockingDecoratorConfiguration
+import org.apache.juli.logging.LogFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 
 class StoreCommandHandler(private val storeService: StoreService) {
+
+    private val logger = LogFactory.getLog(StoreCommandHandler::class.java)
 
     fun commandHandlerDefinitions(): CommandHandlers = SagaCommandHandlersBuilder
         .fromChannel("storeService")
@@ -29,11 +32,13 @@ class StoreCommandHandler(private val storeService: StoreService) {
         .build()
 
     private fun reserve(commandMessage: CommandMessage<ReserveStoreProductCommand>): Message? {
-        println("Hello from reserve")
+        logger.info("Try to reserve product: ${commandMessage.command.productId}")
         return try {
             storeService.receive(commandMessage.command.productId)
+            logger.info("Product reserved")
             withSuccess(ProductReserved())
         } catch (e: StoreException) {
+            logger.warn("Failed to reserve product")
             withFailure(FailedToReserveProduct())
         }
     }

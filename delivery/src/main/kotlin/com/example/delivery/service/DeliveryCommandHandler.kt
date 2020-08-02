@@ -18,26 +18,31 @@ import io.eventuate.tram.sagas.spring.participant.SagaParticipantConfiguration
 import io.eventuate.tram.spring.consumer.kafka.EventuateTramKafkaMessageConsumerConfiguration
 import io.eventuate.tram.spring.messaging.producer.jdbc.TramMessageProducerJdbcConfiguration
 import io.eventuate.tram.spring.optimisticlocking.OptimisticLockingDecoratorConfiguration
+import org.apache.juli.logging.LogFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 
 class DeliveryCommandHandler(private val deliveryService: DeliveryService) {
 
+    private val logger = LogFactory.getLog(DeliveryCommandHandler::class.java)
+
     fun commandHandlerDefinitions(): CommandHandlers = SagaCommandHandlersBuilder
         .fromChannel("deliveryService")
-        .onMessage(CreateDeliveryCommand::class.java, this::reserve)
+        .onMessage(CreateDeliveryCommand::class.java, this::deliver)
         .build()
 
-    private fun reserve(commandMessage: CommandMessage<CreateDeliveryCommand>): Message? {
-        println("Hello from delivery")
+    private fun deliver(commandMessage: CommandMessage<CreateDeliveryCommand>): Message? {
+        logger.info("Try to create delivery from ${commandMessage.command.city} for order = ${commandMessage.command.orderId}")
         return try {
             deliveryService.createDelivery(
                 orderId = commandMessage.command.orderId,
                 city = commandMessage.command.city
             )
+            logger.info("Successfully created delivery")
             withSuccess(DeliveryCreated())
         } catch (e: DeliveryException) {
+            logger.warn("Failed to created delivery: $e")
             withFailure(DeliveryUnavailable())
         }
     }

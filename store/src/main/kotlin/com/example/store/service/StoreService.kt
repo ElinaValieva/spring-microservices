@@ -3,18 +3,23 @@ package com.example.store.service
 import com.example.store.exception.StoreException
 import com.example.store.repository.Product
 import com.example.store.repository.StoreRepository
+import org.apache.commons.logging.LogFactory
 import java.util.*
 
 class StoreService(private val storeRepository: StoreRepository) {
 
+    private val log = LogFactory.getLog(StoreService::class.java)
+
     fun getPresents(): MutableIterable<Product> = storeRepository.findAll()
 
     fun receive(productId: String) {
-        println("Store: $productId")
+        log.info("Receive product: $productId for reserving")
 
         val foundedProduct = storeRepository.findById(productId.toLong())
+
         if (foundedProduct.isEmpty)
             throw StoreException("Product not found")
+
         removeProduct(foundedProduct.get())
     }
 

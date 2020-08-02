@@ -5,6 +5,7 @@ import com.example.delivery.repository.CityDeliveryRepository
 import com.example.delivery.repository.Delivery
 import com.example.delivery.repository.DeliveryRepository
 import com.example.delivery.repository.Status
+import org.apache.juli.logging.LogFactory
 import org.springframework.scheduling.annotation.Scheduled
 import java.util.*
 
@@ -13,6 +14,8 @@ class DeliveryService(
     private val cityDeliveryRepository: CityDeliveryRepository
 ) {
 
+    private val logger = LogFactory.getLog(DeliveryService::class.java)
+
     fun checkDelivery(city: String) = cityDeliveryRepository.findByArrival(city)
         .minBy { it.duration } ?: throw DeliveryException("City not supported")
 
@@ -20,7 +23,7 @@ class DeliveryService(
         deliveryRepository.findByOrderId(id) ?: throw DeliveryException("Delivery not found")
 
     fun createDelivery(city: String, orderId: String) {
-        println("Create delivery: $orderId to $city")
+        logger.info("Create delivery: $orderId to $city")
         val deliveryCity = checkDelivery(city)
         deliveryRepository.save(
             Delivery(
