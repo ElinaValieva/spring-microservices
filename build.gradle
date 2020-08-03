@@ -1,13 +1,28 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
 group 'org.example'
 version '1.0-SNAPSHOT'
 
 task setup {
     doFirst {
         subprojects {
-            println("Build project: ${it.name}")
-            exec {
-                commandLine('cmd', '/c', 'gradlew build')
+            if (it.file('build.gradle.kts').exists() || it.file('build.gradle').exists()) {
+                println("Build project: ${it.name}")
+                exec {
+                    if (Os.isFamily(Os.FAMILY_WINDOWS))
+                        commandLine("cmd", "/c", "gradlew build -x test")
+                    else
+                        commandLine("sh", "-c", "gradlew build -x test")
+                }
             }
+        }
+    }
+    doLast {
+        exec {
+            if (Os.isFamily(Os.FAMILY_WINDOWS))
+                commandLine("cmd", "/c", "docker-compose build")
+            else
+                commandLine("sh", "-c", "docker-compose build")
         }
     }
 }
