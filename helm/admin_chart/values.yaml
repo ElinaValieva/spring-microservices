@@ -1,0 +1,24 @@
+name: admin
+resources:
+  server:
+    requests:
+      memory: 300Mi
+      cpu: 10m
+    limits:
+      memory: 4000Mi
+      cpu: 1
+docker:
+  repository: elvaliev
+  image: admin
+replicas: 1
+uri: admin-server-sol-portfolio-dev03.telitcaas1.t-internal.com
+servers:
+  serviceType: LoadBalancer  # [ClusterIP|LoadBalancer]
+portName: 8888
+application:
+  port: 8888
+pdb:
+  enabled: false
+  minAvailable: 1
+config:
+  url: http://config.sol-portfolio-dev03.svc.cluster.local:8088

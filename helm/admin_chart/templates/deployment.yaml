@@ -33,7 +33,9 @@ spec:
           name: http
         env:
         - name: SERVER_PORT
-          value: "8761"
+          value: "8888"
+        - name: SPRING_CLOUD_CONFIG_URI
+          value: {{ .Values.config.url }}
         readinessProbe:
           failureThreshold: 40
           httpGet:
