@@ -1,7 +1,7 @@
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://eureka:8761/eureka
 zuul:
   prefix: /api
 server:
@@ -12,7 +12,7 @@ spring:
   boot:
     admin:
       client:
-        url: ${ADMIN_URI:http://localhost:8888}
+        url: http://admin:8888
 management:
   endpoints:
     web:
