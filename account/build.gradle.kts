@@ -5,11 +5,13 @@ plugins {
     id("io.spring.dependency-management") version "1.0.9.RELEASE"
     kotlin("jvm") version "1.3.72"
     kotlin("plugin.spring") version "1.3.72"
+    id("com.google.cloud.tools.jib") version "2.4.0"
 }
 
 group = "com.example"
 version = "1.0.0"
 java.sourceCompatibility = JavaVersion.VERSION_11
+val buildNumber by extra("0")
 
 repositories {
     mavenLocal()
@@ -58,5 +60,37 @@ tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "11"
+    }
+}
+
+jib {
+    to {
+        image = "elvaliev/account"
+        tags = setOf("$version", "$version.${extra["buildNumber"]}")
+        auth {
+            username = System.getenv("DOCKERHUB_USERNAME")
+            password = System.getenv("DOCKERHUB_PASSWORD")
+        }
+    }
+    container {
+        labels = mapOf(
+            "maintainer" to "Elina Valieva <veaufa@mail.ru>",
+            "org.opencontainers.image.title" to "account",
+            "org.opencontainers.image.description" to "Spring microservices",
+            "org.opencontainers.image.version" to "$version",
+            "org.opencontainers.image.authors" to "Elina Valieva <veaufa@mail.ru>>",
+            "org.opencontainers.image.url" to "https://github.com/ElinaValieva/spring-microservices"
+        )
+        jvmFlags = listOf(
+            "-server",
+            "-Djava.awt.headless=true",
+            "-XX:InitialRAMFraction=2",
+            "-XX:MinRAMFraction=2",
+            "-XX:MaxRAMFraction=2",
+            "-XX:+UseG1GC",
+            "-XX:MaxGCPauseMillis=100",
+            "-XX:+UseStringDeduplication"
+        )
+        workingDirectory = "/account"
     }
 }
