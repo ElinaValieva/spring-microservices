@@ -1,0 +1,62 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    scheduled: "yes"
+    name: {{ .Values.name }}
+{{ include "labels.standard" . | indent 4 }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /actuator/prometheus
+        prometheus.io/scrape: 'true'
+      creationTimestamp: null
+      labels:
+        app: {{ .Values.name }}
+        release: {{ .Release.Name }}
+        name: {{ .Values.name }}
+    spec:
+      containers:
+      - name: {{ .Values.name }}
+        env:
+            - name: SERVER_PORT
+              value: '8080'
+            - name: SPRING_DATASOURCE_URL
+              value: 'jdbc:postgresql://postgres/eventuate'
+            - name: SPRING_DATASOURCE_USERNAME
+              value: eventuate
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: eventuate
+            - name: SPRING_DATASOURCE_TEST_ON_BORROW
+              value: '"true"'
+            - name: SPRING_DATASOURCE_VALIDATION_QUERY
+              value: SELECT 1
+            - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+              value: org.postgresql.Driver
+            - name: EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS
+              value: 'kafka:29092'
+            - name: EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING
+              value: 'zookeeper:2181'
+            - name: EVENTUATELOCAL_CDC_READER_NAME
+              value: PostgresPollingReader
+            - name: SPRING_PROFILES_ACTIVE
+              value: EventuatePolling
+            - name: JAVA_OPTS
+              value: '-Xmx64m'
+     
+  triggers:
+    - imageChangeParams:
+        automatic: yes
+        containerNames:
+          - {{ .Values.name }}
+        from:
+          kind: ImageStreamTag
+          name: '{{ .Values.name }}:latest'
+      type: ImageChange
+
+  strategy:
+    type: Rolling
+

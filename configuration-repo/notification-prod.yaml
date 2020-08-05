@@ -1,31 +1,37 @@
 eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://eureka:8761/eureka
   instance:
     preferIpAddress: true
     leaseRenewalIntervalInSeconds: 5
     leaseExpirationDurationInSeconds: 5
 server:
-  port: 8083
+  port: 8085
 spring:
   application:
-    name: delivery
+    name: notification
   boot:
     admin:
       client:
         url: http://admin:8888
   datasource:
     url: jdbc:postgresql://postgres/eventuate
-    username: eventuate
-    password: eventuate
-    driver-class-name: org.postgresql.Driver
-    initialization-mode: always
-    continue-on-error: true
+      username: eventuate
+      password: eventuate
+      driver-class-name: org.postgresql.Driver
   jpa:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQL10Dialect
     generate-ddl: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username:
+    password:
+    properties:
+      mail:
+        smptp:
+          auth: true
+          starttls:
+            enable: true
 management:
   endpoints:
     web:

@@ -26,3 +26,23 @@ task setup {
         }
     }
 }
+
+tasks.create('helm') {
+    group 'deploy'
+    description 'Helm Chart installation'
+    doLast {
+        def names = [:]
+        fileTree("helm").visit { FileVisitDetails details ->
+            if (details.directory && !(details.name in ["charts", "templates"]))
+                names[details.name] = details.name.replaceAll("[.,;:_-]?", "")
+        }
+        names.each { entry ->
+            exec {
+                if (Os.isFamily(Os.FAMILY_WINDOWS))
+                    commandLine("cmd", "/c", "helm install $entry.value $entry.key")
+                else
+                    commandLine("sh", "-c", "helm install $entry.value $entry.key")
+            }
+        }
+    }
+}

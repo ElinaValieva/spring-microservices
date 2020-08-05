@@ -1,0 +1,47 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    scheduled: "yes"
+    name: {{ .Values.name }}
+{{ include "labels.standard" . | indent 4 }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /actuator/prometheus
+        prometheus.io/scrape: 'true'
+      creationTimestamp: null
+      labels:
+        app: {{ .Values.name }}
+        release: {{ .Release.Name }}
+        name: {{ .Values.name }}
+    spec:
+      containers:
+      - name: {{ .Values.name }}
+        ports:
+        - containerPort: {{ .Values.application.port }}
+          protocol: TCP
+        env:
+        - name: POSTGRESQL_PASSWORD
+          value: {{ .Values.postgres.password }}
+        - name: POSTGRESQL_USERNAME
+          value: {{ .Values.postgres.username }}
+        - name: POSTGRESQL_DATABASE
+          value: {{ .Values.postgres.db }}
+     
+  triggers:
+    - imageChangeParams:
+        automatic: yes
+        containerNames:
+          - {{ .Values.name }}
+        from:
+          kind: ImageStreamTag
+          name: '{{ .Values.name }}:latest'
+      type: ImageChange
+
+  strategy:
+    type: Rolling
+

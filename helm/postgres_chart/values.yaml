@@ -1,0 +1,18 @@
+name: postgres
+docker:
+  repository: elvaliev
+  image: postgres
+replicas: 1
+uri: postgres-sol-portfolio-dev03.telitcaas1.t-internal.com
+servers:
+  serviceType: ClusterIP  # [ClusterIP|LoadBalancer]
+portName: 5432
+application:
+  port: 5432
+pdb:
+  enabled: false
+  minAvailable: 1
+postgres:
+  db: eventuate
+  username: eventuate
+  password: eventuate

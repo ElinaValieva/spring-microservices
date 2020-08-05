@@ -1,0 +1,47 @@
+eureka:
+  instance:
+    preferIpAddress: true
+    leaseRenewalIntervalInSeconds: 5
+    leaseExpirationDurationInSeconds: 5
+server:
+  port: 8082
+spring:
+  application:
+    name: store
+  boot:
+    admin:
+      client:
+        url: http://admin/
+  datasource:
+    url: jdbc:postgresql://postgres/eventuate
+    username: eventuate
+    password: eventuate
+    driver-class-name: org.postgresql.Driver
+    initialization-mode: always
+    continue-on-error: true
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+    generate-ddl: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+eventuatelocal:
+  kafka:
+    bootstrap:
+      servers: kafka:29092
+  zookeeper:
+    connection:
+      string: zookeeper:2181
+logging:
+  level:
+    org:
+      springframework:
+        orm:
+          jpa: INFO
+      hibernate:
+        SQL: DEBUG
+    io:
+      eventuate: DEBUG

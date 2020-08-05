@@ -1,0 +1,17 @@
+name: cdc
+docker:
+  repository: eventuateio
+  image: eventuate-cdc-service
+  tag: 0.6.0.RC3
+replicas: 1
+servers:
+  serviceType: ClusterIP  # [ClusterIP|LoadBalancer]
+portName: 8080
+application:
+  port: 8080
+pdb:
+  enabled: false
+  minAvailable: 1
+zookeeper:
+  port: "2181"
+  heap_ops: -Xmx64m

@@ -1,0 +1,49 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    scheduled: "yes"
+    name: {{ .Values.name }}
+{{ include "labels.standard" . | indent 4 }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /actuator/prometheus
+        prometheus.io/scrape: 'true'
+      creationTimestamp: null
+      labels:
+        app: {{ .Values.name }}
+        release: {{ .Release.Name }}
+        name: {{ .Values.name }}
+    spec:
+      containers:
+      - name: {{ .Values.name }}
+        ports:
+            - containerPort: 2181
+              protocol: TCP
+            - containerPort: 2888
+              protocol: TCP
+            - containerPort: 3888
+              protocol: TCP
+        env:
+        - name: ZOOKEEPER_CLIENT_PORT
+          value: "2181"
+        - name: KAFKA_HEAP_OPTS
+          value: {{ .Values.zookeeper.heap_ops }}
+     
+  triggers:
+    - imageChangeParams:
+        automatic: yes
+        containerNames:
+          - {{ .Values.name }}
+        from:
+          kind: ImageStreamTag
+          name: '{{ .Values.name }}:latest'
+      type: ImageChange
+
+  strategy:
+    type: Rolling
+

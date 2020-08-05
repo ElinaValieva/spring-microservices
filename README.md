@@ -14,6 +14,6 @@
 
 ### How to start 🐳
 ```shell
-docker-compose build --no-cache
+./gradlew setup
 docker-compose up
 ```

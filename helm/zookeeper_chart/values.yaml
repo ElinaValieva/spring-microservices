@@ -1,0 +1,26 @@
+name: zookeeper
+resources:
+  server:
+    requests:
+      memory: 300Mi
+      cpu: 10m
+    limits:
+      memory: 4000Mi
+      cpu: 1
+docker:
+  repository: confluentinc
+  image: cp-zookeeper
+  tag: 5.2.4
+replicas: 1
+uri: zk-sol-portfolio-dev03.telitcaas1.t-internal.com
+servers:
+  serviceType: ClusterIP  # [ClusterIP|LoadBalancer]
+portName: 2181
+application:
+  port: 2181
+pdb:
+  enabled: false
+  minAvailable: 1
+zookeeper:
+  port: "2181"
+  heap_ops: -Xmx64m

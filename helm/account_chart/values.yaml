@@ -11,7 +11,7 @@ docker:
   repository: elvaliev
   image: account
 replicas: 1
-uri: admin-server-sol-portfolio-dev03.telitcaas1.t-internal.com
+uri: account-sol-portfolio-dev03.telitcaas1.t-internal.com
 servers:
   serviceType: LoadBalancer  # [ClusterIP|LoadBalancer]
 portName: 8081

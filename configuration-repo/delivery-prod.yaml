@@ -1,20 +1,17 @@
 eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://eureka:8761/eureka
   instance:
     preferIpAddress: true
     leaseRenewalIntervalInSeconds: 5
     leaseExpirationDurationInSeconds: 5
 server:
-  port: 8081
+  port: 8084
 spring:
   application:
-    name: store
+    name: delivery
   boot:
     admin:
       client:
-        url: http://admin:8888
+        url: http://admin
   datasource:
     url: jdbc:postgresql://postgres/eventuate
     username: eventuate
@@ -38,13 +35,3 @@ eventuatelocal:
   zookeeper:
     connection:
       string: zookeeper:2181
-logging:
-  level:
-    org:
-      springframework:
-        orm:
-          jpa: INFO
-      hibernate:
-        SQL: DEBUG
-    io:
-      eventuate: DEBUG

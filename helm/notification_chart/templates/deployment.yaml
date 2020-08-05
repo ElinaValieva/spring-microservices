@@ -1,0 +1,74 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    scheduled: "yes"
+    name: {{ .Values.name }}
+{{ include "labels.standard" . | indent 4 }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /actuator/prometheus
+        prometheus.io/scrape: 'true'
+      creationTimestamp: null
+      labels:
+        app: {{ .Values.name }}
+        release: {{ .Release.Name }}
+        name: {{ .Values.name }}
+    spec:
+      containers:
+      - name: {{ .Values.name }}
+        resources:
+          requests:
+            cpu:  {{ .Values.resources.server.requests.cpu }}
+            memory:  {{ .Values.resources.server.requests.memory }}
+          limits:
+            cpu: {{ .Values.resources.server.limits.cpu }}
+            memory:  {{ .Values.resources.server.limits.memory }}
+        ports:
+        - containerPort: {{ .Values.application.port }}
+          name: http
+        env:
+        - name: SERVER_PORT
+          value: "8085"
+        - name: SPRING_CLOUD_CONFIG_URI
+          value: {{ .Values.config.url }}
+        - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+          value: {{ .Values.eureka.url }}
+        - name: SPRING_PROFILES_ACTIVE
+          value: {{ .Values.application.profiles }}
+        readinessProbe:
+          failureThreshold: 40
+          httpGet:
+              path: /actuator/health
+              port: {{ .Values.application.port }}
+              scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          successThreshold: 1
+          timeoutSeconds: 400
+        livenessProbe:
+          failureThreshold: 10
+          initialDelaySeconds: 150
+          periodSeconds: 30
+          successThreshold: 1
+          tcpSocket:
+            port: {{ .Values.application.port }}
+          timeoutSeconds: 400
+     
+  triggers:
+    - imageChangeParams:
+        automatic: yes
+        containerNames:
+          - {{ .Values.name }}
+        from:
+          kind: ImageStreamTag
+          name: '{{ .Values.name }}:latest'
+      type: ImageChange
+
+  strategy:
+    type: Rolling
+
