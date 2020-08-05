@@ -9,5 +9,5 @@
 
 ### How to start 🐳
 ```shell
-./gradlew createCharts
+./gradlew helm
 ```

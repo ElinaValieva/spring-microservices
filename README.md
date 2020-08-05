@@ -14,6 +14,5 @@
 
 ### How to start 🐳
 ```shell
-./gradlew setup
 docker-compose up
 ```
