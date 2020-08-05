@@ -1,0 +1,27 @@
+name: account
+resources:
+  server:
+    requests:
+      memory: 300Mi
+      cpu: 10m
+    limits:
+      memory: 4000Mi
+      cpu: 1
+docker:
+  repository: elvaliev
+  image: account
+replicas: 1
+uri: admin-server-sol-portfolio-dev03.telitcaas1.t-internal.com
+servers:
+  serviceType: LoadBalancer  # [ClusterIP|LoadBalancer]
+portName: 8081
+application:
+  port: 8081
+  profiles: prod
+pdb:
+  enabled: false
+  minAvailable: 1
+config:
+  url: http://config/
+eureka:
+  url: http://server/eureka

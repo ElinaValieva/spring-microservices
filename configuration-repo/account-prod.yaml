@@ -1,10 +1,10 @@
 server:
-  port: 8080
+  port: 8081
 spring:
   boot:
     admin:
       client:
-        url: http://admin:8888
+        url: http://admin/
   application:
     name: account
   datasource:
@@ -22,8 +22,6 @@ management:
         include: "*"
 eureka:
   client:
-    serviceUrl:
-      defaultZone: http://eureka:8761/eureka
     healthcheck:
       enabled: true
   instance:
