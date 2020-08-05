@@ -21,4 +21,4 @@ pdb:
   enabled: false
   minAvailable: 1
 eureka:
-  url: http://server.sol-portfolio-dev03.svc.cluster.local:8761/eureka
+  url: http://server/eureka

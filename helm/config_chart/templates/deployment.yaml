@@ -30,12 +30,12 @@ spec:
             memory:  {{ .Values.resources.server.limits.memory }}
         ports:
         - containerPort: {{ .Values.application.port }}
+          name: http
         env:
         - name: SERVER_PORT
           value: "8088"
-        - name: SPRING_CLOUD_CONFIG_URI
+        - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
           value: {{ .Values.eureka.url }}
-          name: http
         readinessProbe:
           failureThreshold: 40
           httpGet:

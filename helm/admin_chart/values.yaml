@@ -21,4 +21,6 @@ pdb:
   enabled: false
   minAvailable: 1
 config:
-  url: http://config.sol-portfolio-dev03.svc.cluster.local:8088
+  url: http://config/
+eureka:
+  url: http://server/eureka

@@ -36,6 +36,8 @@ spec:
           value: "8888"
         - name: SPRING_CLOUD_CONFIG_URI
           value: {{ .Values.config.url }}
+        - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+          value: {{ .Values.eureka.url }}
         readinessProbe:
           failureThreshold: 40
           httpGet:
