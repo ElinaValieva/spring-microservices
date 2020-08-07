@@ -11,10 +11,15 @@ import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.boot.test.mock.mockito.MockBeans
 import org.springframework.context.annotation.Bean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.util.*
 
+@MockBeans(
+    MockBean(AccountSaga::class),
+    MockBean(SagaInstanceFactory::class)
+)
 @ExtendWith(SpringExtension::class)
 internal class AccountServiceTest {
 
@@ -36,12 +41,6 @@ internal class AccountServiceTest {
 
     @MockBean
     private lateinit var accountRepository: AccountRepository
-
-    @MockBean
-    private lateinit var accountSaga: AccountSaga
-
-    @MockBean
-    private lateinit var sagaInstanceFactory: SagaInstanceFactory
 
     private val account = Account(
         id = 1,
