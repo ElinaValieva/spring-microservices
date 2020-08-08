@@ -7,6 +7,7 @@ import io.eventuate.tram.spring.optimisticlocking.OptimisticLockingDecoratorConf
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient
+import org.springframework.cloud.context.config.annotation.RefreshScope
 import org.springframework.context.annotation.Import
 
 @SpringBootApplication
@@ -17,6 +18,7 @@ import org.springframework.context.annotation.Import
     EventuateTramKafkaMessageConsumerConfiguration::class,
     TramMessageProducerJdbcConfiguration::class
 )
+@RefreshScope
 class OrderApplication
 
 fun main(args: Array<String>) {

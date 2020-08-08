@@ -4,7 +4,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 
-class DeliveryException(override val message: String) : Exception(message)
+class DeliveryException(override val message: String) : RuntimeException(message)
 
 @ControllerAdvice
 class DeliveryExceptionHandler {

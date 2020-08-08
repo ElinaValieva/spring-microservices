@@ -6,13 +6,22 @@ import com.example.store.repository.StoreRepository
 import org.apache.commons.logging.LogFactory
 import java.util.*
 
-class StoreService(private val storeRepository: StoreRepository) {
+interface StoreService {
+
+    fun getPresents(): MutableIterable<Product>
+
+    fun receive(productId: String)
+
+    fun getById(id: Long): Optional<Product>
+}
+
+class StoreServiceImpl(private val storeRepository: StoreRepository) : StoreService {
 
     private val log = LogFactory.getLog(StoreService::class.java)
 
-    fun getPresents(): MutableIterable<Product> = storeRepository.findAll()
+    override fun getPresents(): MutableIterable<Product> = storeRepository.findAll()
 
-    fun receive(productId: String) {
+    override fun receive(productId: String) {
         log.info("Receive product: $productId for reserving")
 
         val foundedProduct = storeRepository.findById(productId.toLong())
@@ -32,5 +41,5 @@ class StoreService(private val storeRepository: StoreRepository) {
         }
     }
 
-    fun getById(id: Long): Optional<Product> = storeRepository.findById(id)
+    override fun getById(id: Long): Optional<Product> = storeRepository.findById(id)
 }

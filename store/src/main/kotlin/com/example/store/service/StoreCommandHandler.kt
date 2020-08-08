@@ -55,7 +55,7 @@ class StoreCommandHandler(private val storeService: StoreService) {
 class StoreConfiguration {
 
     @Bean
-    fun storeService(storeRepository: StoreRepository): StoreService = StoreService(storeRepository)
+    fun storeService(storeRepository: StoreRepository): StoreService = StoreServiceImpl(storeRepository)
 
     @Bean
     fun storeCommandHandler(storeService: StoreService): StoreCommandHandler = StoreCommandHandler(storeService)

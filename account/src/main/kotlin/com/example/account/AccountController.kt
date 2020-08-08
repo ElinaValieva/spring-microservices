@@ -2,19 +2,16 @@ package com.example.account
 
 import com.example.account.repository.Account
 import com.example.account.service.AccountService
-import org.springframework.cloud.context.config.annotation.RefreshScope
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RefreshScope
 class AccountController(var accountService: AccountService) {
 
     @PostMapping("/register")
-    fun register(@RequestBody account: Account): ResponseEntity<HttpStatus> {
-        accountService.register(account)
-        return ResponseEntity.ok(HttpStatus.OK)
+    fun register(@RequestBody account: Account): ResponseEntity<Account>? {
+        return accountService.register(account)?.let { ResponseEntity.ok(it) }
     }
 
     @PostMapping("/login")

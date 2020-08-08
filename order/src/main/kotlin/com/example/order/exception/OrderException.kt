@@ -4,7 +4,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 
-class OrderException(override val message: String) : Exception(message)
+class OrderException(override val message: String) : RuntimeException(message)
 
 @ControllerAdvice
 class OrderExceptionHandler {

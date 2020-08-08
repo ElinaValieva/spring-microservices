@@ -21,7 +21,7 @@ internal class DeliveryServiceTest {
 
         @Bean
         fun deliveryService(cityDeliveryRepository: CityDeliveryRepository, deliveryRepository: DeliveryRepository) =
-            DeliveryService(deliveryRepository, cityDeliveryRepository)
+            DeliveryServiceImpl(deliveryRepository, cityDeliveryRepository)
     }
 
     @Autowired

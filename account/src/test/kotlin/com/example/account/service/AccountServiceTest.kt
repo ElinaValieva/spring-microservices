@@ -32,7 +32,7 @@ internal class AccountServiceTest {
             accountSaga: AccountSaga,
             sagaInstanceFactory: SagaInstanceFactory
         ): AccountService {
-            return AccountService(accountRepository, accountSaga, sagaInstanceFactory)
+            return AccountServiceImpl(accountRepository, accountSaga, sagaInstanceFactory)
         }
     }
 

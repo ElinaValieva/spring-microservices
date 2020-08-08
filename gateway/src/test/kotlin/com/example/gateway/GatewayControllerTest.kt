@@ -77,15 +77,16 @@ internal class GatewayControllerTest {
                     )
                 )
             )
-        val mvcResult = mockMvc.perform(
+
+        val response = mockMvc.perform(
             get("/info/{id}", "1")
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isOk)
             .andReturn()
             .response
-            .contentAsString
 
-        Assertions.assertNotNull(mvcResult)
+
+        Assertions.assertEquals(200, response.status)
     }
 }

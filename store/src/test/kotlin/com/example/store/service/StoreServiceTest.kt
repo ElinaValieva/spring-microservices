@@ -21,7 +21,7 @@ internal class StoreServiceTest {
     class AccountServiceTestConfiguration {
 
         @Bean
-        fun storeService(storeRepository: StoreRepository) = StoreService(storeRepository)
+        fun storeService(storeRepository: StoreRepository) = StoreServiceImpl(storeRepository)
     }
 
     @Autowired

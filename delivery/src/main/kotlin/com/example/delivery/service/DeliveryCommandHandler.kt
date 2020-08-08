@@ -60,7 +60,7 @@ class DeliveryConfiguration {
 
     @Bean
     fun deliveryService(deliveryRepository: DeliveryRepository, cityDeliveryRepository: CityDeliveryRepository) =
-        DeliveryService(
+        DeliveryServiceImpl(
             cityDeliveryRepository = cityDeliveryRepository,
             deliveryRepository = deliveryRepository
         )

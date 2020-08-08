@@ -8,16 +8,26 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
+interface AccountService {
+
+    fun register(account: Account): Account?
+
+    fun login(username: String): Account
+
+    fun edit(account: Account)
+
+    fun getUserInfo(id: Long): Optional<Account>
+}
 
 @Service
-class AccountService(
+class AccountServiceImpl(
     private val accountRepository: AccountRepository,
     private val accountSaga: AccountSaga,
     private val sagaInstanceFactory: SagaInstanceFactory
-) {
+) : AccountService {
 
     @Transactional
-    fun register(account: Account): Account? {
+    override fun register(account: Account): Account? {
         val foundedUser = accountRepository.findByUsername(account.username)
 
         if (foundedUser != null)
@@ -28,10 +38,10 @@ class AccountService(
         return sagaData.id?.let { accountRepository.findById(it).get() }
     }
 
-    fun login(username: String) =
+    override fun login(username: String) =
         accountRepository.findByUsername(username) ?: throw AccountException("User doesn't exist")
 
-    fun edit(account: Account) {
+    override fun edit(account: Account) {
         val foundedUser = login(account.username)
         foundedUser.firstName = account.firstName
         foundedUser.lastName = account.lastName
@@ -40,5 +50,5 @@ class AccountService(
         accountRepository.save(foundedUser)
     }
 
-    fun getUserInfo(id: Long): Optional<Account> = accountRepository.findById(id)
+    override fun getUserInfo(id: Long): Optional<Account> = accountRepository.findById(id)
 }
