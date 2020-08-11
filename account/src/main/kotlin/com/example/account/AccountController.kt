@@ -34,10 +34,10 @@ class AccountController(var accountService: AccountService) {
     fun login(@RequestBody account: Account) = accountService.login(account.username)
 
     @PostMapping("/edit")
+    @ResponseStatus(value = HttpStatus.OK)
     @ApiOperation(value = "Edit user information")
-    fun edit(@RequestBody account: Account): ResponseEntity<HttpStatus> {
+    fun edit(@RequestBody account: Account) {
         accountService.edit(account)
-        return ResponseEntity.ok(HttpStatus.OK)
     }
 
     @GetMapping("/user/{id}")
