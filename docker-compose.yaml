@@ -1,4 +1,4 @@
-version: '2.1'
+version: '3'
 services:
 
   eureka:
@@ -8,19 +8,24 @@ services:
     expose:
       - 8761
     healthcheck:
-      test: "exit 0"
+      test: ["CMD", "curl", "--fail", "--silent", "localhost:8761/actuator/health 2>&1 | grep UP || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   config:
     image: elvaliev/config
     ports:
       - "8088:8088"
     depends_on:
-      eureka:
-        condition: service_healthy
+      - eureka
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
     healthcheck:
-      test: "exit 0"
+      test: ["CMD", "curl", "--fail", "--silent", "localhost:8088/actuator/health 2>&1 | grep UP || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   gateway:
     restart: on-failure
@@ -28,13 +33,12 @@ services:
     ports:
       - "8008:8008"
     depends_on:
-      eureka:
-        condition: service_healthy
-      config:
-        condition: service_started
+      - eureka
+      - config
     environment:
-      SPRING_CLOUD_CONFIG_URI: http://config/
-      SPRING_PROFILES_ACTIVE: docker
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
+      SPRING_CLOUD_CONFIG_URI: http://config:8088
+      SPRING_PROFILES_ACTIVE: prod
       SERVER_PORT: 8008
       ZUUL_PREFIX: /api
 
@@ -44,20 +48,17 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      eureka:
-        condition: service_healthy
-      config:
-        condition: service_started
-      zookeeper:
-        condition: service_started
-      kafka:
-        condition: service_started
-      postgres:
-        condition: service_started
+      - eureka
+      - config
+      - zookeeper
+      - kafka
+      - postgres
     environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
       SERVER_PORT: 8081
       SPRING_CLOUD_CONFIG_URI: http://config:8088
-      SPRING_PROFILES_ACTIVE: docker
+      SPRING_PROFILES_ACTIVE: prod
+
 
   store:
     restart: on-failure
@@ -65,20 +66,16 @@ services:
     ports:
       - "8083:8083"
     depends_on:
-      eureka:
-        condition: service_healthy
-      config:
-        condition: service_started
-      zookeeper:
-        condition: service_started
-      kafka:
-        condition: service_started
-      postgres:
-        condition: service_started
+      - eureka
+      - config
+      - zookeeper
+      - kafka
+      - postgres
     environment:
       SERVER_PORT: 8083
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
       SPRING_CLOUD_CONFIG_URI: http://config:8088
-      SPRING_PROFILES_ACTIVE: docker
+      SPRING_PROFILES_ACTIVE: prod
 
   order:
     restart: on-failure
@@ -86,20 +83,16 @@ services:
     ports:
       - "8082:8082"
     depends_on:
-      eureka:
-        condition: service_healthy
-      config:
-        condition: service_started
-      zookeeper:
-        condition: service_started
-      kafka:
-        condition: service_started
-      postgres:
-        condition: service_started
+      - eureka
+      - config
+      - zookeeper
+      - kafka
+      - postgres
     environment:
       SERVER_PORT: 8082
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
       SPRING_CLOUD_CONFIG_URI: http://config:8088
-      SPRING_PROFILES_ACTIVE: docker
+      SPRING_PROFILES_ACTIVE: prod
 
   delivery:
     restart: on-failure
@@ -107,20 +100,17 @@ services:
     ports:
       - "8084:8084"
     depends_on:
-      eureka:
-        condition: service_healthy
-      config:
-        condition: service_started
-      zookeeper:
-        condition: service_started
-      kafka:
-        condition: service_started
-      postgres:
-        condition: service_started
+      - eureka
+      - config
+      - zookeeper
+      - kafka
+      - postgres
     environment:
       SERVER_PORT: 8084
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
       SPRING_CLOUD_CONFIG_URI: http://config:8088
-      SPRING_PROFILES_ACTIVE: docker
+      SPRING_PROFILES_ACTIVE: prod
+
 
   zookeeper:
     image: confluentinc/cp-zookeeper:5.2.4

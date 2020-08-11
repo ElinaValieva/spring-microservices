@@ -1,0 +1,11 @@
+rootProject.name = "spring-microservices"
+include("cqrs_command")
+include("admin")
+include("config")
+include("delivery")
+include("gateway")
+include("notification")
+include("account")
+include("store")
+include("order")
+include("server")

@@ -23,7 +23,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.support.TransactionTemplate
-import java.util.*
 
 @ExtendWith(MockitoExtension::class)
 @WebMvcTest(AccountController::class)
@@ -154,7 +153,7 @@ internal class AccountControllerTest {
     @Test
     fun getUserInfo() {
         val expectedAccount = Account(id = 1, username = "user")
-        given(accountService.getUserInfo(1)).willReturn(Optional.of(expectedAccount))
+        given(accountService.getUserInfo(1)).willReturn(expectedAccount)
         val response = mockMvc.perform(
             MockMvcRequestBuilders.get("/user/{id}", 1)
                 .contentType(MediaType.APPLICATION_JSON)
