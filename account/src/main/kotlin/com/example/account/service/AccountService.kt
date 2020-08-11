@@ -6,7 +6,6 @@ import com.example.account.repository.AccountRepository
 import io.eventuate.tram.sagas.orchestration.SagaInstanceFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.*
 
 interface AccountService {
 
@@ -16,7 +15,7 @@ interface AccountService {
 
     fun edit(account: Account)
 
-    fun getUserInfo(id: Long): Optional<Account>
+    fun getUserInfo(id: Long): Account?
 }
 
 @Service
@@ -50,5 +49,5 @@ class AccountServiceImpl(
         accountRepository.save(foundedUser)
     }
 
-    override fun getUserInfo(id: Long): Optional<Account> = accountRepository.findById(id)
+    override fun getUserInfo(id: Long): Account? = accountRepository.findById(id).get()
 }
