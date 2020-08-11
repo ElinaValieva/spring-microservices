@@ -77,6 +77,6 @@ internal class AccountServiceTest {
     @Test
     fun getUserInfo() {
         Mockito.`when`(account.id?.let { accountRepository.findById(it) }).thenReturn(Optional.of(account))
-        Assertions.assertEquals(Optional.of(account), accountService.getUserInfo(1))
+        Assertions.assertEquals(account, accountService.getUserInfo(1))
     }
 }
