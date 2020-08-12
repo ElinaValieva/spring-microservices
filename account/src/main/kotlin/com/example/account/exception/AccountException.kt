@@ -13,5 +13,4 @@ class AccountExceptionHandler {
     fun handleMonitoringException(ex: AccountException): ResponseEntity<String> {
         return ResponseEntity.badRequest().body(ex.message)
     }
-
 }
