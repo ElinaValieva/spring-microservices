@@ -11,7 +11,7 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-config-client")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.0.0.RELEASE")
+    implementation("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
