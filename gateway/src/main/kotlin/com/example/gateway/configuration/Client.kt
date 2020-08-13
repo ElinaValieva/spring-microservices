@@ -1,16 +1,28 @@
-package com.example.gateway
+package com.example.gateway.configuration
 
+import com.example.gateway.Delivery
+import com.example.gateway.Order
+import com.example.gateway.Product
+import com.example.gateway.User
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.core.env.Environment
 import org.springframework.stereotype.Component
+import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
 import java.net.InetAddress
 
 @Component
 class Client(private val client: WebClient) {
+
+    fun register(user: User): Mono<Void> {
+        return client.post()
+            .uri("/account/register")
+            .body(BodyInserters.fromValue(user))
+            .retrieve()
+            .bodyToMono(Void::class.java)
+    }
 
     fun getUserById(userId: String): Mono<User> {
         return client
@@ -46,7 +58,7 @@ class Client(private val client: WebClient) {
 }
 
 @Configuration
-class ClientConfiguration(private val environment: Environment) {
+class ClientConfiguration {
 
     @Value("\${server.port}")
     lateinit var port: String

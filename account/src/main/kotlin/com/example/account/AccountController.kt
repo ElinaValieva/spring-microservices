@@ -6,7 +6,6 @@ import com.example.cqrs_command.BaseSwaggerConfiguration
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import org.springframework.context.annotation.Configuration
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import springfox.documentation.swagger2.annotations.EnableSwagger2
@@ -29,18 +28,7 @@ class AccountController(var accountService: AccountService) {
         return accountService.register(account)?.let { ResponseEntity.ok(it) }
     }
 
-    @PostMapping("/login")
-    @ApiOperation(value = "Verify user account")
-    fun login(@RequestBody account: Account) = accountService.login(account.username)
-
-    @PostMapping("/edit")
-    @ResponseStatus(value = HttpStatus.OK)
-    @ApiOperation(value = "Edit user information")
-    fun edit(@RequestBody account: Account) {
-        accountService.edit(account)
-    }
-
     @GetMapping("/user/{id}")
     @ApiOperation(value = "Getting user information")
-    fun getUserInfo(@PathVariable("id") id: Long) = accountService.getUserInfo(id)
+    fun getUserInfo(@PathVariable("id") id: String) = accountService.getUserInfo(id)
 }

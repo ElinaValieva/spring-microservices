@@ -11,11 +11,14 @@ import io.eventuate.tram.commands.consumer.CommandWithDestination
 import io.eventuate.tram.commands.consumer.CommandWithDestinationBuilder
 import io.eventuate.tram.sagas.orchestration.SagaDefinition
 import io.eventuate.tram.sagas.simpledsl.SimpleSaga
+import org.apache.commons.logging.LogFactory
 import org.springframework.context.annotation.Configuration
 
 
 @Configuration
 class AccountSaga(private val accountRepository: AccountRepository) : SimpleSaga<AccountSagaData> {
+
+    private var logger = LogFactory.getLog(AccountSaga::class.java)
 
     override fun getSagaDefinition(): SagaDefinition<AccountSagaData> =
         step()
@@ -42,6 +45,7 @@ class AccountSaga(private val accountRepository: AccountRepository) : SimpleSaga
     }
 
     private fun confirmed(accountSagaData: AccountSagaData, userNotified: UserNotified) {
+        logger.debug(userNotified)
         accountSagaData.id?.let {
             accountRepository.findById(it).get().confirmed()
         }
@@ -51,6 +55,7 @@ class AccountSaga(private val accountRepository: AccountRepository) : SimpleSaga
         accountSagaData: AccountSagaData,
         failedToNotify: FailedToNotify
     ) {
+        logger.debug(failedToNotify)
         reject(accountSagaData)
     }
 
@@ -58,6 +63,6 @@ class AccountSaga(private val accountRepository: AccountRepository) : SimpleSaga
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 data class AccountSagaData(
-    @param:JsonProperty("id") @get:JsonProperty("id") var id: Long? = null,
+    @param:JsonProperty("id") @get:JsonProperty("id") var id: String? = null,
     @param:JsonProperty("account") @get:JsonProperty("account") var account: Account
 )

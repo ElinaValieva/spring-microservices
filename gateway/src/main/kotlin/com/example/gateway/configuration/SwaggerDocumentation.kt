@@ -1,4 +1,4 @@
-package com.example.gateway
+package com.example.gateway.configuration
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
@@ -29,7 +29,8 @@ class SwaggerDocumentation : SwaggerResourcesProvider {
         val swaggerResource = SwaggerResource()
         swaggerResource.name = name
         swaggerResource.location = "$prefixApi/$name/$pathPattern"
-        swaggerResource.swaggerVersion = version
+        swaggerResource.swaggerVersion =
+            version
         return swaggerResource
     }
 }
