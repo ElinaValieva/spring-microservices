@@ -1,5 +1,6 @@
 package com.example.gateway
 
+import com.example.gateway.configuration.Client
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -68,11 +69,11 @@ internal class GatewayControllerTest {
             .willReturn(
                 Mono.just(
                     User(
-                        id = 3,
-                        lastName = "lastName",
-                        firstName = "firstName",
-                        confirmedStatus = "OK",
-                        username = "username",
+                        id = "1234567890",
+                        name = "lastName",
+                        picture = "picture",
+                        locale = "ru",
+                        emailVerified = true,
                         email = "email"
                     )
                 )

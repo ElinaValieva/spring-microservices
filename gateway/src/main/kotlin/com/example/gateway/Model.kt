@@ -4,12 +4,12 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class User @JsonCreator constructor(
-    @JsonProperty("id") var id: Long,
-    @JsonProperty("username") var username: String,
-    @JsonProperty("lastName") var lastName: String,
-    @JsonProperty("firstName") var firstName: String,
+    @JsonProperty("id") var id: String,
+    @JsonProperty("name") var name: String,
     @JsonProperty("email") var email: String,
-    @JsonProperty("confirmedStatus") var confirmedStatus: String
+    @JsonProperty("picture") var picture: String,
+    @JsonProperty("locale") var locale: String,
+    @JsonProperty("emailVerified") var emailVerified: Boolean
 )
 
 data class Order @JsonCreator constructor(
@@ -45,9 +45,8 @@ data class OrderInfo(
 )
 
 data class OrderDetails(
-    val userId: Long,
+    val userId: String,
     val username: String,
-    val userInfo: String,
     val email: String,
     val productId: Long,
     val productInfo: String,
@@ -64,8 +63,7 @@ data class OrderDetails(
 fun convertToOrder(order: Order, user: User, store: Product, delivery: Delivery) =
     OrderDetails(
         userId = user.id,
-        username = user.username,
-        userInfo = "${user.firstName} ${user.lastName}",
+        username = user.name,
         email = user.email,
         productId = store.id,
         productInfo = "${store.name} ${store.description}",

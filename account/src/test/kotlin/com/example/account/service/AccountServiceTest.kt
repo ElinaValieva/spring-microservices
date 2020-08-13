@@ -43,40 +43,28 @@ internal class AccountServiceTest {
     private lateinit var accountRepository: AccountRepository
 
     private val account = Account(
-        id = 1,
-        username = "username",
-        firstName = "firstName",
-        lastName = "lastName",
+        id = "1",
+        name = "username",
         email = "email"
     )
 
     @Test
     fun register() {
-        Mockito.`when`(accountRepository.findByUsername(account.username)).thenReturn(account)
+        Mockito.`when`(account.name?.let { accountRepository.findByName(it) }).thenReturn(null)
+        Assertions.assertEquals(account.id, accountService.register(account)?.id)
+        Assertions.assertEquals(account.name, accountService.register(account)?.name)
+        Assertions.assertEquals(account.email, accountService.register(account)?.email)
+    }
+
+    @Test
+    fun registerWithFailing() {
+        Mockito.`when`(account.name?.let { accountRepository.findByName(it) }).thenReturn(account)
         Assertions.assertThrows(AccountException::class.java) { accountService.register(account) }
-    }
-
-    @Test
-    fun loginWithUserNotExist() {
-        Mockito.`when`(accountRepository.findByUsername(account.username)).thenReturn(null)
-        Assertions.assertThrows(AccountException::class.java) { accountService.login(account.username) }
-    }
-
-    @Test
-    fun login() {
-        Mockito.`when`(accountRepository.findByUsername(account.username)).thenReturn(account)
-        Assertions.assertEquals(account, accountService.login(account.username))
-    }
-
-    @Test
-    fun edit() {
-        Mockito.`when`(accountRepository.findByUsername(account.username)).thenReturn(null)
-        Assertions.assertThrows(AccountException::class.java) { accountService.edit(account) }
     }
 
     @Test
     fun getUserInfo() {
         Mockito.`when`(account.id?.let { accountRepository.findById(it) }).thenReturn(Optional.of(account))
-        Assertions.assertEquals(account, accountService.getUserInfo(1))
+        Assertions.assertEquals(account, accountService.getUserInfo("1"))
     }
 }

@@ -11,11 +11,7 @@ interface AccountService {
 
     fun register(account: Account): Account?
 
-    fun login(username: String): Account
-
-    fun edit(account: Account)
-
-    fun getUserInfo(id: Long): Account?
+    fun getUserInfo(id: String): Account?
 }
 
 @Service
@@ -27,7 +23,7 @@ class AccountServiceImpl(
 
     @Transactional
     override fun register(account: Account): Account? {
-        val foundedUser = accountRepository.findByUsername(account.username)
+        val foundedUser = account.name?.let { accountRepository.findByName(it) }
 
         if (foundedUser != null)
             throw AccountException("User with same username already exist")
@@ -37,17 +33,5 @@ class AccountServiceImpl(
         return sagaData.id?.let { accountRepository.findById(it).get() }
     }
 
-    override fun login(username: String) =
-        accountRepository.findByUsername(username) ?: throw AccountException("User doesn't exist")
-
-    override fun edit(account: Account) {
-        val foundedUser = login(account.username)
-        foundedUser.firstName = account.firstName
-        foundedUser.lastName = account.lastName
-        foundedUser.email = account.email
-
-        accountRepository.save(foundedUser)
-    }
-
-    override fun getUserInfo(id: Long): Account? = accountRepository.findById(id).get()
+    override fun getUserInfo(id: String): Account? = accountRepository.findById(id).get()
 }

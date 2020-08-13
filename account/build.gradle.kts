@@ -8,7 +8,6 @@ extra["springBootAdminVersion"] = "2.2.4"
 
 dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("de.codecentric:spring-boot-admin-starter-client")
     implementation("org.springframework.cloud:spring-cloud-config-client")
