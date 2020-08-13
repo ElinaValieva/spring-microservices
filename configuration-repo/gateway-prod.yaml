@@ -3,6 +3,8 @@ zuul:
 server:
   port: 8008
 spring:
+  main:
+    allow-bean-definition-overriding: true
   application:
     name: gateway
   boot:
@@ -14,3 +16,13 @@ management:
     web:
       exposure:
         include: "*"
+security:
+  oauth2:
+    client:
+      clientAuthenticationScheme: form
+      userAuthorizationUri: https://accounts.google.com/o/oauth2/v2/auth
+      accessTokenUri: https://www.googleapis.com/oauth2/v4/token
+      scope: openid,email,profile
+    resource:
+      userInfoUri: https://www.googleapis.com/oauth2/v3/userinfo
+      preferTokenInfo: true
