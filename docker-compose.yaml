@@ -64,7 +64,7 @@ services:
     restart: on-failure
     image: elvaliev/store
     ports:
-      - "8083:8083"
+      - "8082:8082"
     depends_on:
       - eureka
       - config
@@ -81,7 +81,7 @@ services:
     restart: on-failure
     image: elvaliev/order
     ports:
-      - "8082:8082"
+      - "8083:8083"
     depends_on:
       - eureka
       - config
@@ -89,7 +89,7 @@ services:
       - kafka
       - postgres
     environment:
-      SERVER_PORT: 8082
+      SERVER_PORT: 8083
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
       SPRING_CLOUD_CONFIG_URI: http://config:8088
       SPRING_PROFILES_ACTIVE: prod

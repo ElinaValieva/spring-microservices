@@ -13,6 +13,7 @@ plugins {
 }
 
 subprojects {
+
     if (this.name == "cqrs_command") {
         apply {
             plugin("org.jetbrains.kotlin.jvm")
