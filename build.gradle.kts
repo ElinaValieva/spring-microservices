@@ -13,7 +13,8 @@ plugins {
 }
 
 subprojects {
-    if (this.name in listOf("e2e", "cqrs_command")) {
+
+    if (this.name == "cqrs_command") {
         apply {
             plugin("org.jetbrains.kotlin.jvm")
             plugin("org.jetbrains.kotlin.plugin.spring")
