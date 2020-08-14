@@ -5,12 +5,12 @@ import com.example.e2e.container.ContainerConstant.CONFIG_URL
 import com.example.e2e.container.ContainerConstant.EUREKA_REFERENCE
 import com.example.e2e.container.ContainerConstant.EUREKA_URL
 import com.example.e2e.container.ContainerConstant.HEALTH_CHECK
-import com.example.e2e.container.ContainerConstant.PORT_REFERENCE
 import com.example.e2e.container.ContainerConstant.PROFILES
 import com.example.e2e.container.ContainerConstant.PROFILES_REFERENCE
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.Network
 import org.testcontainers.containers.wait.strategy.Wait
+import java.time.Duration
 
 
 class EurekaContainer(dockerImageName: String) : GenericContainer<EurekaContainer>(dockerImageName) {
@@ -51,7 +51,6 @@ class GatewayContainer(dockerImageName: String) : GenericContainer<EurekaContain
             EUREKA_REFERENCE to EUREKA_URL,
             CONFIG_REFERENCE to CONFIG_URL,
             PROFILES_REFERENCE to PROFILES,
-            PORT_REFERENCE to "8008",
             "ZUUL_PREFIX" to "/api"))
         withNetworkAliases("gateway-alias")
         waitingFor(Wait
@@ -137,11 +136,51 @@ class StoreContainer(dockerImageName: String) : GenericContainer<EurekaContainer
         withEnv(mutableMapOf(
             EUREKA_REFERENCE to EUREKA_URL,
             CONFIG_REFERENCE to CONFIG_URL,
-            PROFILES_REFERENCE to PROFILES,
-            PORT_REFERENCE to "8082"))
+            PROFILES_REFERENCE to PROFILES))
         withNetworkAliases("store")
         waitingFor(Wait
             .forHttp(HEALTH_CHECK)
+            .forStatusCode(200))
+    }
+}
+
+class OrderContainer(dockerImageName: String) : GenericContainer<EurekaContainer>(dockerImageName) {
+
+    constructor(network: Network,
+                eurekaContainer: EurekaContainer,
+                configContainer: ConfigContainer,
+                cdcContainer: CdcContainer) : this("elvaliev/order") {
+        addExposedPorts(8083)
+        withNetwork(network)
+        dependsOn(cdcContainer, eurekaContainer, configContainer)
+        withEnv(mutableMapOf(
+            EUREKA_REFERENCE to EUREKA_URL,
+            CONFIG_REFERENCE to CONFIG_URL,
+            PROFILES_REFERENCE to PROFILES))
+        withNetworkAliases("order")
+        waitingFor(Wait
+            .forHttp(HEALTH_CHECK)
+            .forStatusCode(200))
+    }
+}
+
+class DeliveryContainer(dockerImageName: String) : GenericContainer<EurekaContainer>(dockerImageName) {
+
+    constructor(network: Network,
+                eurekaContainer: EurekaContainer,
+                configContainer: ConfigContainer,
+                cdcContainer: CdcContainer) : this("elvaliev/delivery") {
+        addExposedPorts(8084)
+        withNetwork(network)
+        dependsOn(cdcContainer, eurekaContainer, configContainer)
+        withEnv(mutableMapOf(
+            EUREKA_REFERENCE to EUREKA_URL,
+            CONFIG_REFERENCE to CONFIG_URL,
+            PROFILES_REFERENCE to PROFILES))
+        withNetworkAliases("delivery")
+        waitingFor(Wait
+            .forHttp(HEALTH_CHECK)
+            .withReadTimeout(Duration.ofMinutes(2))
             .forStatusCode(200))
     }
 }
@@ -157,8 +196,6 @@ object ContainerConstant {
     const val CONFIG_URL = "http://config-alias:8088"
 
     const val PROFILES_REFERENCE = "SPRING_PROFILES_ACTIVE"
-
-    const val PORT_REFERENCE = "SERVER_PORT"
 
     const val PROFILES = "prod"
 

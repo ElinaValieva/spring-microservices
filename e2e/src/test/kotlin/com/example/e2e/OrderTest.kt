@@ -1,7 +1,7 @@
 package com.example.e2e
 
 import com.example.e2e.container.*
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.testcontainers.containers.Network
 import org.testcontainers.junit.jupiter.Container
@@ -29,23 +29,33 @@ class OrderTest {
 
     @Container
     val cdcContainer = CdcContainer(network,
-            zookeeperContainer = zookeeperContainer,
-            kafkaContainer = kafkaContainer,
-            postgresContainer = postgresContainer)
+        zookeeperContainer = zookeeperContainer,
+        kafkaContainer = kafkaContainer,
+        postgresContainer = postgresContainer)
 
     @Container
     val storeContainer = StoreContainer(network,
-            cdcContainer = cdcContainer,
-            eurekaContainer = eurekaContainer,
-            configContainer = configContainer)
+        cdcContainer = cdcContainer,
+        eurekaContainer = eurekaContainer,
+        configContainer = configContainer)
+
+    @Container
+    val orderContainer = OrderContainer(network,
+        cdcContainer = cdcContainer,
+        eurekaContainer = eurekaContainer,
+        configContainer = configContainer)
+
+    @Container
+    val deliveryContainer = DeliveryContainer(network,
+        cdcContainer = cdcContainer,
+        eurekaContainer = eurekaContainer,
+        configContainer = configContainer)
 
 
     @Test
     fun test() {
-        Assertions.assertTrue(eurekaContainer.isRunning)
-        Assertions.assertTrue(configContainer.isRunning)
-        Assertions.assertTrue(zookeeperContainer.isRunning)
-        Assertions.assertTrue(cdcContainer.isRunning)
-        Assertions.assertTrue(storeContainer.isRunning)
+        assertTrue(storeContainer.isRunning)
+        assertTrue(orderContainer.isRunning)
+        assertTrue(deliveryContainer.isRunning)
     }
 }
