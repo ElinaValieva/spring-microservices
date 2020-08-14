@@ -20,8 +20,8 @@ class EurekaContainer(dockerImageName: String) : GenericContainer<EurekaContaine
         withNetwork(network)
         withNetworkAliases("server-alias")
         waitingFor(Wait
-                .forHttp(HEALTH_CHECK)
-                .forStatusCode(200))
+            .forHttp(HEALTH_CHECK)
+            .forStatusCode(200))
     }
 }
 
@@ -34,8 +34,8 @@ class ConfigContainer(dockerImageName: String) : GenericContainer<EurekaContaine
         withEnv(EUREKA_REFERENCE, EUREKA_URL)
         withNetworkAliases("config-alias")
         waitingFor(Wait
-                .forHttp(HEALTH_CHECK)
-                .forStatusCode(200))
+            .forHttp(HEALTH_CHECK)
+            .forStatusCode(200))
     }
 }
 
@@ -48,15 +48,101 @@ class GatewayContainer(dockerImageName: String) : GenericContainer<EurekaContain
         withNetwork(network)
         dependsOn(eurekaContainer, configContainer)
         withEnv(mutableMapOf(
-                EUREKA_REFERENCE to EUREKA_URL,
-                CONFIG_REFERENCE to CONFIG_URL,
-                PROFILES_REFERENCE to PROFILES,
-                PORT_REFERENCE to "8008",
-                "ZUUL_PREFIX" to "/api"))
+            EUREKA_REFERENCE to EUREKA_URL,
+            CONFIG_REFERENCE to CONFIG_URL,
+            PROFILES_REFERENCE to PROFILES,
+            PORT_REFERENCE to "8008",
+            "ZUUL_PREFIX" to "/api"))
         withNetworkAliases("gateway-alias")
         waitingFor(Wait
-                .forHttp(HEALTH_CHECK)
-                .forStatusCode(200))
+            .forHttp(HEALTH_CHECK)
+            .forStatusCode(200))
+    }
+}
+
+class ZookeeperContainer(dockerImageName: String) : GenericContainer<EurekaContainer>(dockerImageName) {
+
+    constructor(network: Network) : this("confluentinc/cp-zookeeper:5.2.4") {
+        addExposedPorts(2181)
+        withNetwork(network)
+        withEnv(mutableMapOf(
+            "ZOOKEEPER_CLIENT_PORT" to "2181",
+            "KAFKA_HEAP_OPTS" to "-Xmx64m"))
+        withNetworkAliases("zookeeper")
+    }
+}
+
+class KafkaContainer(dockerImageName: String) : GenericContainer<EurekaContainer>(dockerImageName) {
+
+    constructor(network: Network, zookeeperContainer: ZookeeperContainer) : this("confluentinc/cp-kafka:5.2.4") {
+        addExposedPorts(9092)
+        withNetwork(network)
+        dependsOn(zookeeperContainer)
+        withEnv(mutableMapOf(
+            "KAFKA_LISTENERS" to "LC://kafka:29092,LX://kafka:9092",
+            "KAFKA_ADVERTISED_LISTENERS" to "LC://kafka:29092,LX://kafka:9092",
+            "KAFKA_LISTENER_SECURITY_PROTOCOL_MAP" to "LC:PLAINTEXT,LX:PLAINTEXT",
+            "KAFKA_INTER_BROKER_LISTENER_NAME" to "LC",
+            "KAFKA_ZOOKEEPER_CONNECT" to "zookeeper:2181"))
+        withNetworkAliases("kafka")
+    }
+}
+
+class PostgresContainer(dockerImageName: String) : GenericContainer<EurekaContainer>(dockerImageName) {
+
+    constructor(network: Network) : this("eventuateio/eventuate-tram-sagas-postgres") {
+        addExposedPorts(5432)
+        withNetwork(network)
+        withEnv(mutableMapOf(
+            "POSTGRES_USER" to "eventuate",
+            "POSTGRES_PASSWORD" to "eventuate"))
+        withNetworkAliases("postgres")
+    }
+}
+
+class CdcContainer(dockerImageName: String) : GenericContainer<EurekaContainer>(dockerImageName) {
+
+    constructor(network: Network,
+                zookeeperContainer: ZookeeperContainer,
+                kafkaContainer: KafkaContainer,
+                postgresContainer: PostgresContainer) : this("eventuateio/eventuate-cdc-service:0.6.0.RC3") {
+        addExposedPorts(8080)
+        withNetwork(network)
+        dependsOn(zookeeperContainer, kafkaContainer, postgresContainer)
+        withEnv(mutableMapOf(
+            "SPRING_DATASOURCE_URL" to "jdbc:postgresql://postgres/eventuate",
+            "SPRING_DATASOURCE_USERNAME" to "eventuate",
+            "SPRING_DATASOURCE_PASSWORD" to "eventuate",
+            "SPRING_DATASOURCE_TEST_ON_BORROW" to "true",
+            "SPRING_DATASOURCE_VALIDATION_QUERY" to "SELECT 1",
+            "SPRING_DATASOURCE_DRIVER_CLASS_NAME" to "org.postgresql.Driver",
+            "EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS" to "kafka:29092",
+            "EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING" to "zookeeper:2181",
+            "EVENTUATELOCAL_CDC_READER_NAME" to "PostgresPollingReader",
+            "SPRING_PROFILES_ACTIVE" to "EventuatePolling",
+            "JAVA_OPTS" to "-Xmx64m"))
+        withNetworkAliases("cdc")
+    }
+}
+
+class StoreContainer(dockerImageName: String) : GenericContainer<EurekaContainer>(dockerImageName) {
+
+    constructor(network: Network,
+                eurekaContainer: EurekaContainer,
+                configContainer: ConfigContainer,
+                cdcContainer: CdcContainer) : this("elvaliev/store") {
+        addExposedPorts(8082)
+        withNetwork(network)
+        dependsOn(cdcContainer, eurekaContainer, configContainer)
+        withEnv(mutableMapOf(
+            EUREKA_REFERENCE to EUREKA_URL,
+            CONFIG_REFERENCE to CONFIG_URL,
+            PROFILES_REFERENCE to PROFILES,
+            PORT_REFERENCE to "8082"))
+        withNetworkAliases("store")
+        waitingFor(Wait
+            .forHttp(HEALTH_CHECK)
+            .forStatusCode(200))
     }
 }
 
