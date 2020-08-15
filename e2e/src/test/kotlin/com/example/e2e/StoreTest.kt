@@ -1,15 +1,16 @@
 package com.example.e2e
 
 import com.example.e2e.container.*
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import org.testcontainers.containers.Network
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 
+@Suppress("CAST_NEVER_SUCCEEDS")
 @Testcontainers
-class OrderTest {
+class StoreTest {
 
     private val network = Network.newNetwork()
 
@@ -40,32 +41,18 @@ class OrderTest {
             eurekaContainer = eurekaContainer,
             configContainer = configContainer)
 
-    @Container
-    val orderContainer = OrderContainer(network,
-            cdcContainer = cdcContainer,
-            eurekaContainer = eurekaContainer,
-            configContainer = configContainer)
-
-    @Container
-    val deliveryContainer = DeliveryContainer(network,
-            cdcContainer = cdcContainer,
-            eurekaContainer = eurekaContainer,
-            configContainer = configContainer)
-
     private val restExecutor = RestExecutor()
 
     @Test
     fun test() {
-        assertTrue(storeContainer.isRunning)
-        assertTrue(orderContainer.isRunning)
-        assertTrue(deliveryContainer.isRunning)
-        val url = "http://${orderContainer.host}:${orderContainer.firstMappedPort}"
-        val order = restExecutor.createOrder(url)
-        val orderBody = order.body!!
-        assertEquals(HttpStatus.OK, order.statusCode)
-        assertNotNull(orderBody)
-        val orderById = restExecutor.getOrderById(url, orderBody.id.toString())
-        assertEquals(HttpStatus.OK, orderById.statusCode)
-        assertNotNull(orderById.body)
+        Assertions.assertTrue(storeContainer.isRunning)
+        val url = "http://${storeContainer.host}:${storeContainer.firstMappedPort}"
+        val presents = restExecutor.getPresents(url)
+        val presentsBody = presents.body!!
+        Assertions.assertEquals(HttpStatus.OK, presents.statusCode)
+        Assertions.assertFalse(presentsBody.isEmpty())
+        val present = restExecutor.getPresentById(url, (presentsBody[0] as LinkedHashMap<String, Any>)["id"].toString())
+        Assertions.assertEquals(HttpStatus.OK, present.statusCode)
+        Assertions.assertNotNull(present.body)
     }
 }
