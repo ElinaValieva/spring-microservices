@@ -1,6 +1,6 @@
 package com.example.store
 
-import com.example.cqrs_command.BaseSwaggerConfiguration
+import com.example.common.BaseSwaggerConfiguration
 import com.example.store.service.StoreService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation

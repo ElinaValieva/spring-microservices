@@ -1,4 +1,4 @@
-package com.example.cqrs_command
+package com.example.common
 
 class DeliveryUnavailable : Result
 

@@ -1,4 +1,4 @@
-package com.example.cqrs_command
+package com.example.common
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.annotation.JsonCreator

@@ -2,7 +2,7 @@ package com.example.account
 
 import com.example.account.repository.Account
 import com.example.account.service.AccountService
-import com.example.cqrs_command.BaseSwaggerConfiguration
+import com.example.common.BaseSwaggerConfiguration
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import org.springframework.context.annotation.Configuration

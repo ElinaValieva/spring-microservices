@@ -2,9 +2,9 @@ package com.example.account.service
 
 import com.example.account.repository.Account
 import com.example.account.repository.AccountRepository
-import com.example.cqrs_command.FailedToNotify
-import com.example.cqrs_command.NotifyUserCommand
-import com.example.cqrs_command.UserNotified
+import com.example.common.FailedToNotify
+import com.example.common.NotifyUserCommand
+import com.example.common.UserNotified
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.eventuate.tram.commands.consumer.CommandWithDestination

@@ -1,4 +1,4 @@
-package com.example.cqrs_command
+package com.example.common
 
 import org.springframework.context.annotation.Bean
 import springfox.documentation.builders.ApiInfoBuilder
