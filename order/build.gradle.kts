@@ -11,7 +11,7 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     implementation("de.codecentric:spring-boot-admin-starter-client")
     implementation("org.springframework.cloud:spring-cloud-config-client")
-    implementation(project(":cqrs_command"))
+    implementation(project(":common"))
     implementation("org.postgresql:postgresql:42.2.10")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("io.eventuate.tram.sagas:eventuate-tram-sagas-orchestration-simple-dsl:$eventuateCore")
