@@ -16,7 +16,8 @@
 ```shell script
 docker-compose up
 ```
-Browse `http://localhost:8008/swagger-ui.html`
+Browse swagger `http://localhost:8008/swagger-ui.html`
+
 &nbsp;
 
 ### Deploy to OpenShift 🚩
