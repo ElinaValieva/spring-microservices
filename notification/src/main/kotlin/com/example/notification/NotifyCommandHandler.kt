@@ -1,8 +1,8 @@
 package com.example.notification
 
-import com.example.cqrs_command.FailedToNotify
-import com.example.cqrs_command.NotifyUserCommand
-import com.example.cqrs_command.UserNotified
+import com.example.common.FailedToNotify
+import com.example.common.NotifyUserCommand
+import com.example.common.UserNotified
 import io.eventuate.tram.commands.consumer.CommandDispatcher
 import io.eventuate.tram.commands.consumer.CommandHandlerReplyBuilder
 import io.eventuate.tram.commands.consumer.CommandHandlers

@@ -1,8 +1,8 @@
 package com.example.delivery.service
 
-import com.example.cqrs_command.CreateDeliveryCommand
-import com.example.cqrs_command.DeliveryCreated
-import com.example.cqrs_command.DeliveryUnavailable
+import com.example.common.CreateDeliveryCommand
+import com.example.common.DeliveryCreated
+import com.example.common.DeliveryUnavailable
 import com.example.delivery.exception.DeliveryException
 import com.example.delivery.repository.CityDeliveryRepository
 import com.example.delivery.repository.DeliveryRepository

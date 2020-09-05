@@ -19,7 +19,7 @@ dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     implementation("de.codecentric:spring-boot-admin-starter-client")
     implementation("org.springframework.cloud:spring-cloud-config-client")
-    implementation(project(":cqrs_command"))
+    implementation(project(":common"))
     implementation("io.eventuate.tram.sagas:eventuate-tram-sagas-spring-participant:$eventuateCore")
     implementation("io.eventuate.tram.core:eventuate-tram-spring-optimistic-locking:$eventuateSpring")
     implementation("io.eventuate.tram.core:eventuate-tram-spring-consumer-jdbc:$eventuateSpring")

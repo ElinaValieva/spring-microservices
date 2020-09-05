@@ -18,7 +18,7 @@ dependencies {
     implementation("io.eventuate.tram.core:eventuate-tram-spring-producer-jdbc:$eventuateSpring")
     implementation("io.eventuate.tram.core:eventuate-tram-spring-consumer-kafka:$eventuateSpring")
     implementation("org.postgresql:postgresql:42.2.10")
-    implementation(project(":cqrs_command"))
+    implementation(project(":common"))
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }

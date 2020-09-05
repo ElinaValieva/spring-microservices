@@ -1,8 +1,8 @@
 package com.example.store.service
 
-import com.example.cqrs_command.FailedToReserveProduct
-import com.example.cqrs_command.ProductReserved
-import com.example.cqrs_command.ReserveStoreProductCommand
+import com.example.common.FailedToReserveProduct
+import com.example.common.ProductReserved
+import com.example.common.ReserveStoreProductCommand
 import com.example.store.exception.StoreException
 import com.example.store.repository.StoreRepository
 import io.eventuate.tram.commands.consumer.CommandDispatcher

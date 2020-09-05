@@ -13,7 +13,7 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-config-client")
     implementation("org.postgresql:postgresql:42.2.10")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation(project(":cqrs_command"))
+    implementation(project(":common"))
     implementation("io.eventuate.tram.sagas:eventuate-tram-sagas-orchestration-simple-dsl:$eventuateCore")
     implementation("io.eventuate.tram.sagas:eventuate-tram-sagas-spring-orchestration:$eventuateCore")
     implementation("io.eventuate.tram.sagas:eventuate-tram-sagas-spring-participant:$eventuateCore")

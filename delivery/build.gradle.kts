@@ -12,7 +12,7 @@ dependencies {
     implementation("de.codecentric:spring-boot-admin-starter-client")
     implementation("org.springframework.cloud:spring-cloud-config-client")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
-    implementation(project(":cqrs_command"))
+    implementation(project(":common"))
     implementation("org.postgresql:postgresql:42.2.10")
     implementation("io.eventuate.tram.sagas:eventuate-tram-sagas-spring-participant:$eventuateCore")
     implementation("io.eventuate.tram.core:eventuate-tram-spring-optimistic-locking:$eventuateSpring")

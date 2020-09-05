@@ -1,6 +1,6 @@
 package com.example.delivery
 
-import com.example.cqrs_command.BaseSwaggerConfiguration
+import com.example.common.BaseSwaggerConfiguration
 import com.example.delivery.service.DeliveryService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation

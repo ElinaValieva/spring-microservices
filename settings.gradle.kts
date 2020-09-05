@@ -1,5 +1,5 @@
 rootProject.name = "spring-microservices"
-include("cqrs_command")
+include("common")
 include("admin")
 include("config")
 include("delivery")

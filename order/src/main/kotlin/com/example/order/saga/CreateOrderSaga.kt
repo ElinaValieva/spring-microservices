@@ -1,6 +1,6 @@
 package com.example.order.saga
 
-import com.example.cqrs_command.*
+import com.example.common.*
 import com.example.order.repository.Order
 import com.example.order.repository.OrderRepository
 import com.fasterxml.jackson.annotation.JsonAutoDetect

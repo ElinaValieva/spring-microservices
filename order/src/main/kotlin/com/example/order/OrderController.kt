@@ -1,6 +1,6 @@
 package com.example.order
 
-import com.example.cqrs_command.BaseSwaggerConfiguration
+import com.example.common.BaseSwaggerConfiguration
 import com.example.order.repository.OrderDetails
 import com.example.order.service.OrderService
 import io.swagger.annotations.Api
