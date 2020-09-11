@@ -76,9 +76,9 @@ tasks.create("helm") {
         names.forEach { (key, value) ->
             exec {
                 if (Os.isFamily(Os.FAMILY_WINDOWS))
-                    commandLine("cmd", "/c", "helm upgrade $value $key")
+                    commandLine("cmd", "/c", "helm upgrade -i $value $key")
                 else
-                    commandLine("sh", "-c", "helm upgrade $value $key")
+                    commandLine("sh", "-c", "helm upgrade -i $value $key")
             }
         }
     }
