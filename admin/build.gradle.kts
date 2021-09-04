@@ -1,7 +1,7 @@
 java.sourceCompatibility = JavaVersion.VERSION_11
 val buildNumber by extra("0")
 
-extra["springBootAdminVersion"] = "2.2.4"
+extra["springBootAdminVersion"] = "2.5.1"
 extra["springCloudVersion"] = "Hoxton.SR6"
 
 

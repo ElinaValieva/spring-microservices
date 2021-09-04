@@ -44,8 +44,7 @@ class Client(private val client: WebClient) {
         return client
             .get()
             .uri("/order/order/{id}", id)
-            .exchange()
-            .flatMap { it.bodyToMono(Order::class.java) }
+            .exchangeToMono { it.bodyToMono(Order::class.java) }
     }
 
     fun getDeliveryInfo(id: Long): Mono<Delivery> {

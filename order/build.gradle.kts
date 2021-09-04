@@ -3,7 +3,7 @@ val buildNumber by extra("0")
 val eventuateSpring: String by System.getProperties()
 val eventuateCore: String by System.getProperties()
 extra["springCloudVersion"] = "Hoxton.SR6"
-extra["springBootAdminVersion"] = "2.2.4"
+extra["springBootAdminVersion"] = "2.5.1"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")

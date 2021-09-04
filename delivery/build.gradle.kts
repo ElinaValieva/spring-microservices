@@ -2,7 +2,7 @@ java.sourceCompatibility = JavaVersion.VERSION_11
 val buildNumber by extra("0")
 val eventuateSpring: String by System.getProperties()
 val eventuateCore: String by System.getProperties()
-extra["springBootAdminVersion"] = "2.2.4"
+extra["springBootAdminVersion"] = "2.5.1"
 extra["springCloudVersion"] = "Hoxton.SR6"
 
 dependencies {

@@ -9,7 +9,7 @@ configurations {
 }
 
 extra["springCloudVersion"] = "Hoxton.SR6"
-extra["springBootAdminVersion"] = "2.2.4"
+extra["springBootAdminVersion"] = "2.5.1"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
