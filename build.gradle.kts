@@ -8,8 +8,8 @@ plugins {
     id("org.springframework.boot") version "2.3.2.RELEASE" apply false
     id("io.spring.dependency-management") version "1.0.9.RELEASE" apply false
     id("com.google.cloud.tools.jib") version "2.4.0" apply false
-    kotlin("jvm") version "1.3.72" apply false
-    kotlin("plugin.spring") version "1.3.72" apply false
+    kotlin("jvm") version "1.5.0" apply false
+    kotlin("plugin.spring") version "1.5.0" apply false
 }
 
 subprojects {

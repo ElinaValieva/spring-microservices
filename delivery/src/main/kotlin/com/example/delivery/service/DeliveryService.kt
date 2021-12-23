@@ -24,7 +24,7 @@ class DeliveryServiceImpl(
     private val logger = LogFactory.getLog(DeliveryService::class.java)
 
     override fun checkDelivery(city: String) = cityDeliveryRepository.findByArrival(city)
-        .minBy { it.duration } ?: throw DeliveryException("City not supported")
+        .minByOrNull { it.duration } ?: throw DeliveryException("City not supported")
 
     override fun getDeliveryInfo(id: String) =
         deliveryRepository.findByOrderId(id) ?: throw DeliveryException("Delivery not found")
